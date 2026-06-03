@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sonair — Be Heard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- LANDING PAGE                           -->
+<!-- ═══════════════════════════════════════ -->
+<div id="page-landing">
+  <nav class="nav">
+    <div class="logo">Son<span>air</span></div>
+    <div class="nav-right">
+      <button class="btn-outline" id="btn-signin">Sign In</button>
+      <button class="btn-primary" id="btn-signup">Get Started</button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-eyebrow">Audio-First Social Platform</div>
+    <h1>Your voice.<br><em>The world listens.</em></h1>
+    <p>The short-form audio platform built for creators. Discover news, business, comedy, education and more — one swipe at a time.</p>
+    <div class="waitlist-row">
+      <input type="email" id="waitlist-email" placeholder="Enter your email address" class="waitlist-input">
+      <button class="waitlist-btn" id="btn-waitlist">Join Waitlist</button>
+    </div>
+    <div class="waitlist-count"><span id="waitlist-num">3,241</span> people already waiting</div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="marquee-dot"></span>News</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Business</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Comedy</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Education</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Sports</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Technology</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Stories</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Wellness</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Music</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Live Audio</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>News</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Business</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Comedy</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Education</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Sports</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Technology</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Stories</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Wellness</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Music</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Live Audio</span>
+    </div>
+  </div>
+
+  <section class="features">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">Why Sonair</div>
+        <div class="section-title">Built for the<br>spoken word</div>
+      </div>
+      <div class="section-sub">Everything you need to create, discover and monetize short-form audio content.</div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-num">01</div>
+        <h3>Infinite Audio Feed</h3>
+        <p>Swipe through a personalized stream of audio clips with a For You algorithm that learns exactly what you want to hear.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02</div>
+        <h3>Record in Seconds</h3>
+        <p>Tap, speak, publish. Trim, add music, apply voice effects — everything built in, no external tools required.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03</div>
+        <h3>AI-Powered Discovery</h3>
+        <p>Automatic transcription, smart topic tagging, and recommendations that surface the right content at the right time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04</div>
+        <h3>Live Audio Rooms</h3>
+        <p>Go live to your followers, invite co-hosts, take listener questions and receive virtual gifts — all in real time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">05</div>
+        <h3>Earn From Your Voice</h3>
+        <p>Tips, subscriptions, virtual gifts and a revenue sharing program. Your audience becomes your income.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">06</div>
+        <h3>Real Communities</h3>
+        <p>Dedicated spaces for news, business, comedy, education, sports and more. Find your audience and build something real.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories-section">
+    <div class="section-eyebrow" style="text-align:center;margin-bottom:14px">Content Categories</div>
+    <div class="section-title" style="text-align:center;font-size:clamp(28px,3.5vw,44px)">Every niche. One platform.</div>
+    <div class="cats-grid">
+      <div class="cat-chip"><i class="ti ti-news"></i> News</div>
+      <div class="cat-chip"><i class="ti ti-chart-line"></i> Business</div>
+      <div class="cat-chip"><i class="ti ti-mood-happy"></i> Comedy</div>
+      <div class="cat-chip"><i class="ti ti-school"></i> Education</div>
+      <div class="cat-chip"><i class="ti ti-ball-football"></i> Sports</div>
+      <div class="cat-chip"><i class="ti ti-music"></i> Music</div>
+      <div class="cat-chip"><i class="ti ti-cpu"></i> Technology</div>
+      <div class="cat-chip"><i class="ti ti-feather"></i> Stories</div>
+      <div class="cat-chip"><i class="ti ti-heartbeat"></i> Wellness</div>
+      <div class="cat-chip"><i class="ti ti-live-view"></i> Live Audio</div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="section-eyebrow" style="margin-bottom:20px">Get Early Access</div>
+    <h2>Ready to be heard?</h2>
+    <p>Join thousands of creators already building their audience on Sonair.</p>
+    <button class="btn-large" id="btn-cta">Launch Sonair Free <i class="ti ti-arrow-right"></i></button>
+    <div style="font-size:12px;color:var(--muted2);margin-top:16px;letter-spacing:0.5px">No credit card required</div>
+  </section>
+
+  <footer class="footer">
+    <div class="logo" style="font-size:16px">Son<span>air</span></div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+    <p>© 2025 Sonair</p>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- AUTH MODAL                             -->
+<!-- ═══════════════════════════════════════ -->
+<div id="modal-auth" class="modal-bg" style="display:none">
+  <div class="modal-box">
+    <button class="modal-close" id="btn-close-auth"><i class="ti ti-x"></i></button>
+    <div class="modal-logo">Son<span>air</span></div>
+    <div class="modal-tagline">Your voice. The world listens.</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" data-tab="login">Sign In</button>
+      <button class="auth-tab" id="tab-signup" data-tab="signup">Create Account</button>
+    </div>
+    <div id="auth-error" class="auth-error" style="display:none"></div>
+    <div id="auth-success" class="auth-success" style="display:none"></div>
+    <!-- LOGIN -->
+    <form id="form-login">
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com" required></div>
+      <div class="field"><label>Password</label><input type="password" id="login-password" placeholder="Your password" required></div>
+      <button type="submit" class="btn-submit" id="btn-login-submit">Sign In →</button>
+      <div class="auth-divider">or</div>
+      <button type="button" class="btn-social" id="btn-google-login"><i class="ti ti-brand-google"></i> Continue with Google</button>
+      <div class="auth-footer-link">No account? <a href="#" id="link-to-signup">Create one free</a></div>
+    </form>
+    <!-- SIGNUP -->
+    <form id="form-signup" style="display:none">
+      <div class="field"><label>Full Name</label><input type="text" id="signup-name" placeholder="Your full name" required></div>
+      <div class="field"><label>Username</label><input type="text" id="signup-username" placeholder="yourhandle" required></div>
+      <div class="field"><label>Email</label><input type="email" id="signup-email" placeholder="you@example.com" required></div>
+      <div class="field"><label>Password</label><input type="password" id="signup-password" placeholder="At least 6 characters" required minlength="6"></div>
+      <button type="submit" class="btn-submit" id="btn-signup-submit">Create Account →</button>
+      <div class="auth-divider">or</div>
+      <button type="button" class="btn-social" id="btn-google-signup"><i class="ti ti-brand-google"></i> Sign up with Google</button>
+      <div class="auth-footer-link">Already have an account? <a href="#" id="link-to-login">Sign in</a></div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- APP                                    -->
+<!-- ═══════════════════════════════════════ -->
+<div id="page-app" style="display:none">
+  <header class="app-header">
+    <div class="logo" style="font-size:17px">Son<span>air</span></div>
+    <div class="app-header-right">
+      <button class="icon-btn" id="btn-search-header" title="Search"><i class="ti ti-search"></i></button>
+      <button class="icon-btn" id="btn-signout" title="Sign out"><i class="ti ti-logout"></i></button>
+    </div>
+  </header>
+  <div class="app-body">
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-view="feed"><i class="ti ti-home"></i><span>For You</span></div>
+        <div class="nav-item" data-view="discover"><i class="ti ti-compass"></i><span>Discover</span></div>
+        <div class="nav-item" data-view="create"><i class="ti ti-circle-plus"></i><span>Create</span></div>
+        <div class="nav-item" data-view="live"><i class="ti ti-live-view"></i><span>Live</span></div>
+        <div class="nav-item" data-view="activity"><i class="ti ti-bell"></i><span>Activity</span><span class="badge">4</span></div>
+        <div class="nav-item" data-view="profile"><i class="ti ti-user"></i><span>Profile</span></div>
+      </nav>
+      <div class="sidebar-user" id="sidebar-user">
+        <div class="avatar" id="sidebar-avatar">?</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-name" id="sidebar-name">Loading...</div>
+          <div class="sidebar-handle" id="sidebar-handle">@user</div>
+        </div>
+      </div>
+    </aside>
+    <main class="main">
+      <!-- FEED -->
+      <div id="view-feed" class="view active">
+        <div class="feed-tabs-bar">
+          <span class="feed-tab" data-feed="following">Following</span>
+          <span class="feed-tab active" data-feed="foryou">For You</span>
+          <span class="rss-live" id="rss-live" style="display:none"><i class="ti ti-rss"></i> Live</span>
+        </div>
+        <div class="feed-nav-arrows">
+          <button class="feed-arrow" id="btn-prev"><i class="ti ti-chevron-up"></i></button>
+          <button class="feed-arrow" id="btn-next"><i class="ti ti-chevron-down"></i></button>
+        </div>
+        <div class="feed-loading" id="feed-loading">
+          <div class="spinner"></div>
+          <div>Loading live content...</div>
+          <div class="feed-loading-sub">Fetching from NPR, The Daily, Planet Money & more</div>
+        </div>
+        <div class="feed-scroll" id="feed-scroll"></div>
+      </div>
+      <!-- DISCOVER -->
+      <div id="view-discover" class="view">
+        <div class="view-inner">
+          <div class="search-bar"><i class="ti ti-search"></i><input type="text" id="discover-search" placeholder="Search creators, topics, sounds..."></div>
+          <div class="view-section-label">Categories</div>
+          <div class="discover-cats" id="discover-cats"></div>
+          <div class="view-section-title">Trending</div>
+          <div id="trending-list"></div>
+          <div class="view-section-title">Suggested Creators</div>
+          <div class="creators-grid" id="creators-grid"></div>
+        </div>
+      </div>
+      <!-- CREATE -->
+      <div id="view-create" class="view">
+        <div class="view-inner">
+          <h2 class="view-title">New Audio Clip</h2>
+          <p class="view-subtitle">Record your voice or upload an audio file</p>
+          <div class="rec-visualizer" id="rec-viz"></div>
+          <div class="duration-row" id="duration-row"></div>
+          <div class="rec-controls">
+            <button class="rec-btn" id="rec-btn"><i class="ti ti-microphone" id="rec-icon"></i></button>
+            <div class="rec-timer" id="rec-timer">0:00</div>
+            <div class="rec-status" id="rec-status">Tap to record</div>
+          </div>
+          <div class="tools-grid">
+            <div class="tool-item"><i class="ti ti-scissors"></i><span>Trim</span></div>
+            <div class="tool-item"><i class="ti ti-volume"></i><span>Volume</span></div>
+            <div class="tool-item"><i class="ti ti-music"></i><span>Background Music</span></div>
+            <div class="tool-item"><i class="ti ti-wand"></i><span>Voice FX</span></div>
+            <div class="tool-item"><i class="ti ti-ear-off"></i><span>Noise Reduction</span></div>
+            <div class="tool-item" id="upload-btn"><i class="ti ti-upload"></i><span>Upload File</span></div>
+          </div>
+          <input type="file" id="file-upload" accept="audio/*" style="display:none">
+          <div class="publish-form">
+            <div class="field"><label>Title</label><input type="text" id="pub-title" placeholder="Give your clip a title..."></div>
+            <div class="field"><label>Description</label><textarea id="pub-desc" rows="2" placeholder="What's this clip about?"></textarea></div>
+            <div class="field"><label>Hashtags</label><input type="text" id="pub-tags" placeholder="#news #business #comedy"></div>
+            <div class="field"><label>Category</label>
+              <select id="pub-cat">
+                <option>News</option><option>Business</option><option>Comedy</option>
+                <option>Education</option><option>Sports</option><option>Music</option>
+                <option>Technology</option><option>Stories</option><option>Wellness</option>
+              </select>
+            </div>
+            <button class="btn-submit" id="btn-publish">Publish to Sonair →</button>
+          </div>
+        </div>
+      </div>
+      <!-- LIVE -->
+      <div id="view-live" class="view">
+        <div class="view-inner">
+          <div class="view-row-header">
+            <h2 class="view-title">Live Now</h2>
+            <button class="btn-primary" id="btn-go-live">Go Live</button>
+          </div>
+          <div id="live-list"></div>
+        </div>
+      </div>
+      <!-- ACTIVITY -->
+      <div id="view-activity" class="view">
+        <div class="view-inner">
+          <h2 class="view-title">Activity</h2>
+          <div class="section-label-sm" style="margin-bottom:8px">New</div>
+          <div id="activity-new"></div>
+          <div class="section-label-sm" style="margin-top:24px;margin-bottom:8px">Earlier</div>
+          <div id="activity-old"></div>
+        </div>
+      </div>
+      <!-- PROFILE -->
+      <div id="view-profile" class="view">
+        <div class="profile-cover"></div>
+        <div class="profile-top"><div class="profile-avatar" id="profile-avatar">?</div><button class="btn-outline">Edit Profile</button></div>
+        <div class="profile-name" id="profile-name">Loading...</div>
+        <div class="profile-handle" id="profile-handle">@user</div>
+        <div class="profile-bio">Creator on Sonair 🎙️</div>
+        <div class="profile-stats">
+          <div class="stat"><div class="stat-n">0</div><div class="stat-l">Clips</div></div>
+          <div class="stat"><div class="stat-n">0</div><div class="stat-l">Followers</div></div>
+          <div class="stat"><div class="stat-n">0</div><div class="stat-l">Following</div></div>
+        </div>
+        <div class="profile-empty">
+          <i class="ti ti-microphone"></i>
+          <p>No clips yet. Create your first one.</p>
+          <button class="btn-primary" id="btn-create-first">Create a Clip</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-items">
+      <div class="mob-item active" data-view="feed"><i class="ti ti-home"></i><span>Home</span></div>
+      <div class="mob-item" data-view="discover"><i class="ti ti-compass"></i><span>Discover</span></div>
+      <div class="mob-item" data-view="create"><div class="mob-create"><i class="ti ti-plus"></i></div></div>
+      <div class="mob-item" data-view="activity"><i class="ti ti-bell"></i><span>Activity</span></div>
+      <div class="mob-item" data-view="profile"><i class="ti ti-user"></i><span>Profile</span></div>
+    </div>
+  </nav>
+  <!-- PLAYER BAR -->
+  <div class="player-bar" id="player-bar" style="display:none">
+    <div class="player-bar-info">
+      <div class="player-bar-title" id="player-title">No clip playing</div>
+      <div class="player-bar-source" id="player-source"></div>
+    </div>
+    <div class="player-bar-progress" id="player-progress"><div class="player-bar-fill" id="player-fill" style="width:0%"></div></div>
+    <div class="player-bar-controls">
+      <button class="icon-btn" id="pb-rewind"><i class="ti ti-rewind-10"></i></button>
+      <button class="icon-btn player-play" id="pb-play"><i class="ti ti-player-play" id="pb-play-icon"></i></button>
+      <button class="icon-btn" id="pb-next"><i class="ti ti-skip-forward"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- COMMENTS MODAL -->
+<div id="modal-comments" class="modal-bg" style="display:none">
+  <div class="comments-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Comments</div>
+    <div id="comments-list"></div>
+    <div class="comment-input-row">
+      <input type="text" id="comment-input" placeholder="Add a comment...">
+      <button class="icon-btn" id="btn-send-comment"><i class="ti ti-send"></i></button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/feed.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
