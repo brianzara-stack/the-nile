@@ -145,15 +145,20 @@ function buildDiscover() {
 
   const trendingEl = document.getElementById('trending-list');
   TRENDING.forEach(t => {
-    trendingEl.innerHTML += `
-      <div class="trend-item">
-        <span class="trend-rank">${t.rank}</span>
-        <div>
-          <div class="trend-name">${t.tag}</div>
-          <div class="trend-count">${t.clips} clips</div>
-        </div>
-        <i class="ti ti-player-play" style="margin-left:auto;color:var(--muted);font-size:18px"></i>
-      </div>`;
+    const item = document.createElement('div');
+    item.className = 'trend-item';
+    item.innerHTML = `
+      <span class="trend-rank">${t.rank}</span>
+      <div>
+        <div class="trend-name">${t.tag}</div>
+        <div class="trend-count">${t.clips} clips</div>
+      </div>
+      <i class="ti ti-arrow-right" style="margin-left:auto;color:var(--muted);font-size:16px"></i>`;
+    item.onclick = () => {
+      switchView('feed');
+      showToast('Showing ' + t.tag);
+    };
+    trendingEl.appendChild(item);
   });
 
   const creatorsEl = document.getElementById('creators-grid');
@@ -168,9 +173,29 @@ function buildDiscover() {
       </div>`;
   });
 
-  document.getElementById('discover-search').oninput = (e) => {
-    if (e.target.value.length > 2) showToast('Searching for "' + e.target.value + '"...');
-  };
+  const searchInput = document.getElementById('discover-search');
+  if (searchInput) {
+    let searchTimeout;
+    searchInput.oninput = (e) => {
+      clearTimeout(searchTimeout);
+      const q = e.target.value.trim();
+      if (q.length > 2) {
+        searchTimeout = setTimeout(async () => {
+          showToast('Searching for "' + q + '"...');
+          const results = await searchListenNotes(q, 'News');
+          if (results.length > 0) {
+            clips = results;
+            currentIdx = 0;
+            buildFeed();
+            switchView('feed');
+            showToast(results.length + ' results for "' + q + '"');
+          } else {
+            showToast('No results found');
+          }
+        }, 600);
+      }
+    };
+  }
 }
 
 // ── CREATE ──

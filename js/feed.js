@@ -141,7 +141,7 @@ function animateWaveform(id, pct) {
   const bars = document.querySelectorAll(`#wv-${id} .wv-bar`);
   bars.forEach((b, i) => {
     const barPct = (i / bars.length) * 100;
-    b.style.background = barPct < pct ? 'var(--accent)' : 'rgba(0,0,0,0.12)';
+    b.style.background = barPct < pct ? '#B8922A' : 'rgba(255,255,255,0.2)';
     if (isPlaying && barPct >= pct && barPct < pct + 5) {
       b.style.height = (5 + Math.random() * 38) + 'px';
     }
@@ -156,7 +156,7 @@ function buildWaveform(containerId, pct = 0) {
     const b = document.createElement('div');
     b.className = 'wv-bar';
     b.style.height = (5 + Math.random() * 38) + 'px';
-    b.style.background = (i / 50 * 100) < pct ? 'var(--accent)' : 'rgba(0,0,0,0.12)';
+    b.style.background = (i / 50 * 100) < pct ? '#B8922A' : 'rgba(255,255,255,0.2)';
     el.appendChild(b);
   }
 }
@@ -384,32 +384,19 @@ function buildFeed() {
 
     const clipImg = getClipImage(clip);
     card.innerHTML = `
-      <div class="clip-card-bg" style="background:${clip.bg};background-image:url(${clipImg});background-size:cover;background-position:center"></div>
+      <div class="clip-card-bg" style="background-image:url(${clipImg});background-color:#1a1208;background-size:cover;background-position:center"></div>
       <div class="clip-card-content">
-        <!-- LEFT: ARTICLE WITH IMAGE -->
-        <div class="clip-article">
-          <div class="clip-image-wrap">
-            <img class="clip-image" src="${clipImg}" alt="${clip.title}" loading="lazy" onerror="this.style.display='none'">
-            <div class="clip-image-overlay"></div>
-          </div>
-          <div class="clip-section-tag">${clip.cat}</div>
-          <div class="clip-headline">${clip.title}</div>
-          <div class="clip-byline">
-            <div class="clip-byline-avatar" style="background-image:url(${clipImg})"></div>
-            <span>${clip.creator}</span>
-            <span class="byline-dot"></span>
-            <span>${fmtTime(clip.duration)}</span>
-          </div>
-          <div class="clip-standfirst">${clip.desc || 'From the great works of human thought and literature.'}</div>
-          <div class="clip-article-tags">${clip.tags}</div>
+        <div class="clip-section-tag">${clip.cat}</div>
+        <div class="clip-headline">${clip.title}</div>
+        <div class="clip-byline">
+          <div class="clip-byline-avatar" style="background-image:url(${clip.podcastImage || clipImg})"></div>
+          <span>${clip.creator}</span>
+          <span class="byline-dot"></span>
+          <span>${fmtTime(clip.duration)}</span>
         </div>
-        <!-- RIGHT: PLAYER -->
-        <div class="clip-player-panel">
-          <div class="clip-player-img" style="background-image:url(${clipImg})">
-            <div class="clip-player-img-overlay"></div>
-            <div class="clip-player-img-label">${clip.cat}</div>
-          </div>
-          <div class="player-panel-label">Now Playing</div>
+        <div class="clip-standfirst">${clip.desc || 'From the great works of human thought and literature.'}</div>
+        <div class="clip-article-tags">${clip.tags}</div>
+        <div class="clip-inline-player">
           <div class="waveform" id="wv-${clip.id}" onclick="seekWaveform(event,'${clip.id}')"></div>
           <div class="progress-row">
             <span class="time-label" id="et-${clip.id}">${fmtTime(elapsed)}</span>
@@ -427,17 +414,13 @@ function buildFeed() {
             <button class="ctrl-btn" onclick="nextClip()"><i class="ti ti-skip-forward"></i></button>
             <button class="speed-tag" onclick="cycleSpeed()">${currentSpeed}x</button>
           </div>
-          <div class="clip-creator-row-panel">
-            <div class="clip-creator-photo" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')" style="cursor:pointer"></div>
-            <div style="flex:1;min-width:0;cursor:pointer" onclick="openPodcastProfile('${clip.id}')">
-              <div style="font-family:var(--font-serif);font-size:13px;font-weight:700;font-style:italic;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${clip.creator}</div>
-              <div style="font-family:var(--font-mono);font-size:9px;color:var(--accent);letter-spacing:0.5px">${clip.cat.toUpperCase()} · TAP FOR PROFILE</div>
-            </div>
+          <div class="clip-creator-strip">
+            <div class="clip-creator-photo" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')"></div>
+            <span class="clip-creator-name" onclick="openPodcastProfile('${clip.id}')">${clip.creator}</span>
             <button class="follow-pill ${followedCreators[clip.id] ? 'following' : ''}" id="fp-${clip.id}" onclick="toggleFollow('${clip.id}')">${followedCreators[clip.id] ? 'Subscribed' : 'Subscribe'}</button>
           </div>
         </div>
       </div>
-      <!-- ACTIONS -->
       <div class="clip-actions">
         <div class="action-btn ${likedClips[clip.id] ? 'liked' : ''}" onclick="toggleLike('${clip.id}',this)">
           <div class="action-circle"><i class="ti ti-heart"></i></div>
@@ -453,7 +436,7 @@ function buildFeed() {
         <div class="action-btn ${savedClips[clip.id] ? 'saved' : ''}" onclick="toggleSave('${clip.id}',this)">
           <div class="action-circle"><i class="ti ti-bookmark"></i></div>
         </div>
-      </div>`;
+      </div>`
 
     container.appendChild(card);
     buildWaveform('wv-' + clip.id, pct);
