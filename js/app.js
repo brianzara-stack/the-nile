@@ -120,8 +120,8 @@ function wireAppEvents() {
 
 // ── DISCOVER ──
 function buildDiscover() {
-  const CATS = ['All', 'News', 'Issues', 'Lifestyle', 'Entertainment', 'Philosophy', 'History', 'Business'];
-  const ICONS = { All: 'ti-apps', News: 'ti-news', Issues: 'ti-world', Lifestyle: 'ti-heart', Entertainment: 'ti-masks-theater', Philosophy: 'ti-yin-yang', History: 'ti-hourglass', Business: 'ti-chart-line' };
+  const CATS = ['All', 'News', 'Issues', 'Lifestyle', 'Entertainment', 'Philosophy', 'History'];
+  const ICONS = { All: 'ti-apps', News: 'ti-news', Issues: 'ti-world', Lifestyle: 'ti-heart', Entertainment: 'ti-masks-theater', Philosophy: 'ti-yin-yang', History: 'ti-hourglass' };
 
   const catsEl = document.getElementById('discover-cats');
   CATS.forEach(cat => {
@@ -333,3 +333,198 @@ function sendComment() {
 
 // ── HEADER SEARCH ──
 document.getElementById('btn-search-header').onclick = () => switchView('discover');
+
+// ═══════════════════════════════════════
+// CREATOR PROFILE
+// ═══════════════════════════════════════
+
+async function buildProfile() {
+  if (!currentUser) return;
+
+  const meta = currentUser.user_metadata || {};
+  const name = meta.full_name || currentUser.email.split('@')[0];
+  const username = meta.username || name.toLowerCase().replace(/\s+/g, '');
+  const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+
+  // Set cover watermark
+  const coverText = document.getElementById('profile-cover-text');
+  if (coverText) coverText.textContent = name.split(' ')[0];
+
+  // Set avatar
+  const av = document.getElementById('profile-avatar');
+  if (av) av.textContent = initials;
+
+  // Set name and handle
+  document.getElementById('profile-name').textContent = name;
+  document.getElementById('profile-handle').textContent = '@' + username;
+
+  // Set bio from Supabase if available
+  let bio = 'Creator at The Nile · N.I.L.E.';
+  let totalPlays = 0;
+  let followerCount = 0;
+  let followingCount = 0;
+  let clipCount = 0;
+  let userClips = [];
+
+  if (currentUser.id) {
+    try {
+      // Fetch profile
+      const { data: profile } = await db.from('profiles').select('*').eq('id', currentUser.id).single();
+      if (profile) {
+        bio = profile.bio || bio;
+        followerCount = profile.follower_count || 0;
+        followingCount = profile.following_count || 0;
+        totalPlays = profile.total_plays || 0;
+      }
+
+      // Fetch user's clips
+      const { data: clipsData } = await db.from('clips').select('*').eq('user_id', currentUser.id).eq('status', 'published').order('created_at', { ascending: false });
+      if (clipsData) {
+        userClips = clipsData;
+        clipCount = clipsData.length;
+        totalPlays = clipsData.reduce((sum, c) => sum + (c.play_count || 0), 0);
+      }
+    } catch(e) {
+      console.warn('Profile fetch error:', e);
+    }
+  }
+
+  // Update bio
+  document.getElementById('profile-bio').textContent = bio;
+
+  // Update stats
+  document.getElementById('stat-clips').textContent = clipCount;
+  document.getElementById('stat-followers').textContent = followerCount >= 1000 ? (followerCount/1000).toFixed(1) + 'K' : followerCount;
+  document.getElementById('stat-following').textContent = followingCount;
+  document.getElementById('stat-plays').textContent = totalPlays >= 1000 ? (totalPlays/1000).toFixed(1) + 'K' : totalPlays;
+
+  // Build tags
+  const tagsEl = document.getElementById('profile-tags');
+  if (tagsEl) {
+    const tags = ['Creator', 'The Nile', 'N.I.L.E.'];
+    tagsEl.innerHTML = tags.map(t => `<span class="profile-tag">${t}</span>`).join('');
+  }
+
+  // Build clips grid
+  buildProfileClipsGrid(userClips, name, initials);
+
+  // Build about section
+  buildAboutSection(name, username, currentUser.email);
+
+  // Wire up profile tabs
+  document.querySelectorAll('.profile-tab').forEach(tab => {
+    tab.onclick = function() {
+      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.ptab-content').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      const target = document.getElementById('ptab-' + this.dataset.ptab);
+      if (target) target.classList.add('active');
+    };
+  });
+
+  // Edit profile button
+  document.getElementById('btn-edit-profile').onclick = () => showToast('Edit profile coming soon');
+
+  // Share button
+  document.getElementById('btn-share-profile').onclick = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href + '?profile=' + username);
+      showToast('Profile link copied!');
+    }
+  };
+}
+
+function buildProfileClipsGrid(clips, name, initials) {
+  const grid = document.getElementById('profile-clips-grid');
+  if (!grid) return;
+
+  if (!clips || clips.length === 0) {
+    grid.innerHTML = `
+      <div class="profile-empty">
+        <i class="ti ti-microphone"></i>
+        <p>No clips yet. Contribute your first.</p>
+        <button class="btn-primary" onclick="switchView('create')">Contribute a Clip</button>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = clips.map(clip => {
+    const catImgs = {
+      'Philosophy': 'photo-1571019613454-1cb2f99b2d8b',
+      'Business': 'photo-1454165804606-c3d57bc86b40',
+      'Literature': 'photo-1481627834876-b7833e8f5570',
+      'History': 'photo-1461360228754-6e81c478b882',
+      'Education': 'photo-1503676260728-1c00da094a0b',
+      'Stories': 'photo-1513836279014-a89f7a76ae86',
+    };
+    const imgId = catImgs[clip.category] || 'photo-1503676260728-1c00da094a0b';
+    const imgUrl = 'https://images.unsplash.com/' + imgId + '?w=400&q=80&fit=crop';
+    return `
+    <div class="profile-clip-card" onclick="playClipFromProfile('${clip.id}')">
+      <img class="profile-clip-img" src="${imgUrl}" alt="${clip.title}" loading="lazy" onerror="this.style.display='none'">
+      <div class="pcc-cat">${clip.category || 'General'}</div>
+      <div class="pcc-title">${clip.title}</div>
+      <div class="pcc-desc">${clip.description || ''}</div>
+      <div class="pcc-meta">
+        <div class="pcc-stats">
+          <span><i class="ti ti-player-play" style="font-size:12px"></i>${clip.play_count || 0}</span>
+          <span><i class="ti ti-heart" style="font-size:12px"></i>${clip.like_count || 0}</span>
+        </div>
+        <div class="pcc-duration">${formatDuration(clip.duration_seconds || 0)}</div>
+        <div class="pcc-play"><i class="ti ti-player-play"></i></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildAboutSection(name, username, email) {
+  const el = document.getElementById('about-section');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="about-field">
+      <div class="about-label">Creator</div>
+      <div class="about-value" style="font-family:var(--font-serif);font-size:20px;font-weight:800;font-style:italic">${name}</div>
+    </div>
+    <div class="about-field">
+      <div class="about-label">Handle</div>
+      <div class="about-value">@${username}</div>
+    </div>
+    <div class="about-field">
+      <div class="about-label">Platform</div>
+      <div class="about-value">The Nile — News. Issues. Lifestyle. Entertainment.</div>
+    </div>
+    <div class="about-field">
+      <div class="about-label">Member Since</div>
+      <div class="about-value">${new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'})}</div>
+    </div>
+    <div class="about-field">
+      <div class="about-label">Contribute</div>
+      <div class="about-value">
+        <button class="btn-primary" onclick="switchView('create')" style="margin-top:4px">Record a New Clip</button>
+      </div>
+    </div>`;
+}
+
+function formatDuration(secs) {
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  if (m === 0) return s + ' sec';
+  if (s === 0) return m + ' min';
+  return m + ' min ' + s + ' sec';
+}
+
+function playClipFromProfile(clipId) {
+  switchView('feed');
+  setTimeout(() => {
+    const card = document.getElementById('card-' + clipId);
+    if (card) card.scrollIntoView({ behavior: 'smooth' });
+    togglePlay(clipId);
+  }, 300);
+}
+
+// Override switchView to build profile when navigating to it
+const _origSwitchView = switchView;
+switchView = function(viewName) {
+  _origSwitchView(viewName);
+  if (viewName === 'profile') buildProfile();
+};
