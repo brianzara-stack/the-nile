@@ -257,17 +257,14 @@ function buildFeed() {
     card.className = 'clip-card';
     card.id = 'card-' + clip.id;
 
-    card.innerHTML = `
-      <!-- Background -->
-      <div class="clip-bg" style="${hasPodcastImg
-        ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center;`
-        : `background:${bg};`
-      }"></div>
-      ${hasPodcastImg ? '<div class="clip-bg-blur"></div>' : ''}
-      <div class="clip-bg-overlay"></div>
+    const cardInnerStyle = hasPodcastImg
+      ? `position:relative`
+      : `background:${bg}`;
 
+    card.innerHTML = `
       <!-- Portrait card -->
-      <div class="clip-card-inner">
+      <div class="clip-card-inner" style="${cardInnerStyle}">
+      ${hasPodcastImg ? `<div class="clip-card-img" style="background-image:url(${clip.podcastImage})"></div>` : ''}
 
         <!-- Top bar -->
         <div class="clip-top-bar">

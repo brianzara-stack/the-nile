@@ -315,12 +315,14 @@ img { display: block; }
 
 .feed-scroll {
   flex: 1;
+  height: 100%;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scrollbar-width: none;
   min-height: 0;
 }
 .feed-scroll::-webkit-scrollbar { display: none; }
+.feed-scroll .clip-card { height: 100%; min-height: 0; }
 
 /* Up/down arrows */
 .feed-nav-arrows {
@@ -352,35 +354,37 @@ img { display: block; }
   background: var(--white);
 }
 
-/* Full-screen gradient bg */
-.clip-bg {
-  position: absolute; inset: 0; z-index: 0;
-  transition: opacity 0.3s;
-}
-.clip-bg-blur {
-  position: absolute; inset: 0; z-index: 0;
-  backdrop-filter: blur(60px) brightness(0.4) saturate(0.5);
-}
-.clip-bg-overlay {
-  position: absolute; inset: 0; z-index: 1;
-  background: rgba(255,255,255,0.92);
-}
+/* Outer card bg — unused on desktop, full screen on mobile */
+.clip-bg { display: none; }
+.clip-bg-blur { display: none; }
+.clip-bg-overlay { display: none; }
 
-/* Portrait card */
+/* Portrait card — gradient lives here */
 .clip-card-inner {
   position: relative; z-index: 2;
-  width: min(360px, calc(100vw - 180px));
+  width: min(360px, calc(100vw - 160px));
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
   aspect-ratio: 9/16;
-  max-height: calc(100% - 24px);
-  background: #111;
+  max-height: calc(100% - 16px);
+  /* gradient set inline by JS */
   transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
-.clip-card-inner:hover { transform: scale(1.008); box-shadow: 0 16px 60px rgba(0,0,0,0.24); }
+.clip-card-inner:hover { transform: scale(1.012); box-shadow: 0 16px 60px rgba(0,0,0,0.3); }
+
+/* Podcast image fills the card */
+.clip-card-img {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+}
+/* Darken podcast images so text reads */
+.clip-card-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.92) 100%);
+}
 
 /* Top bar — NYT section label */
 .clip-top-bar {
