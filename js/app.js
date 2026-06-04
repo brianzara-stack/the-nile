@@ -1,604 +1,599 @@
-// ═══════════════════════════════════════
-// SONAIR — APP (Discover, Create, Live, Activity, Profile)
-// ═══════════════════════════════════════
+// THE NILE — CLEAN APP
 
-const TRENDING = [
-  { rank: 1, tag: '#Stoicism', clips: '48K' },
-  { rank: 2, tag: '#DailyNews', clips: '41K' },
-  { rank: 3, tag: '#MarcusAurelius', clips: '32K' },
-  { rank: 4, tag: '#Lifestyle', clips: '27K' },
-  { rank: 5, tag: '#ClassicLiterature', clips: '19K' },
-  { rank: 6, tag: '#BigIdeas', clips: '16K' },
-];
+const SUPABASE_URL = 'https://xrejvtgnbalplueskgij.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhyZWp2dGduYmFscGx1ZXNrZ2lqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MjU4MjIsImV4cCI6MjA5NjAwMTgyMn0.3NI9k5h_-kMRJh8FSlC4irSXReciHJEXtUjZdtYy7OM';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const CREATORS = [
-  { name: 'Marcus Aurelius', handle: '@marcusaurelius', followers: '2.1M', color: 'linear-gradient(135deg,#C8A96E,#8B5E3C)', initials: 'MA' },
-  { name: 'Dale Carnegie', handle: '@dalecarnegie', followers: '890K', color: 'linear-gradient(135deg,#A07840,#C8A96E)', initials: 'DC' },
-  { name: 'Sun Tzu', handle: '@suntzu', followers: '1.4M', color: 'linear-gradient(135deg,#8B7355,#C8A96E)', initials: 'ST' },
-  { name: 'Seneca', handle: '@seneca', followers: '780K', color: 'linear-gradient(135deg,#C8A96E,#6E5A3C)', initials: 'SE' },
-];
+// ── GRADIENTS ──
+const GRADIENTS = {
+  'marcus aurelius':['#1a0a2e','#16213e','#0f3460'],
+  'dale carnegie':['#0f2027','#203a43','#2c5364'],
+  'sun tzu':['#16222a','#3a6073','#1a1a2e'],
+  'seneca':['#2c1810','#6b3a2a','#1a0a05'],
+  'epictetus':['#0d1b2a','#1b2a4a','#2d4a6b'],
+  'aristotle':['#0d0d1a','#1a1a3e','#2a2a5e'],
+  'plato':['#1a0d2e','#2e1a5e','#0d0a1a'],
+  'napoleon hill':['#1a1a2e','#16213e','#0f3460'],
+  'james allen':['#0a1a0a','#1a3a1a','#0d2a0d'],
+  'benjamin franklin':['#0a1628','#1c3a5c','#2a4a7a'],
+  'thoreau':['#0a1a0a','#1a3a1a','#0a2a10'],
+  'douglass':['#1a0a0a','#3a1a1a','#1a0505'],
+  'machiavelli':['#1a1205','#3a2a0d','#1a0d02'],
+  'oscar wilde':['#1a0a1a','#3a1a3a','#5e2a5e'],
+  'dickens':['#0a0a1a','#1a1a3a','#2a2050'],
+  'mark twain':['#0d1a0d','#1a3328','#0a2018'],
+  'shakespeare':['#1a0505','#3a0d0d','#1a0202'],
+  'confucius':['#1a0d05','#3a2010','#1a1005'],
+  'tolstoy':['#0a0d1a','#1a2030','#0a1520'],
+  'gibran':['#1a0d1a','#3a1a3a','#1a0a20'],
+  'hugo':['#0d0a1a','#1a1530','#2a2050'],
+  'voltaire':['#0d1a10','#1a3a20','#0a2015'],
+  'emerson':['#1a1205','#2a2010','#3a3020'],
+  'News':['#050d18','#0a1e30','#051020'],
+  'Issues':['#050d08','#0a1e10','#051008'],
+  'Lifestyle':['#0d0518','#1e0a30','#100520'],
+  'Entertainment':['#180505','#300a0a','#200305'],
+  'Philosophy':['#050518','#0a0a30','#030318'],
+  'History':['#100c02','#2a200a','#180e02'],
+  'Education':['#051528','#0a2a4a','#051020'],
+};
 
-const ACTIVITY_NEW = [
-  { av: 'NP', color: 'linear-gradient(135deg,#E8384F,#FF8C5E)', text: '<strong>@nprnews</strong> published a new clip', time: '2m ago', thumb: true },
-  { av: 'TD', color: 'linear-gradient(135deg,#333,#666)', text: '<strong>@thedailynyt</strong> posted today\'s episode', time: '8m ago', thumb: true },
-  { av: 'PM', color: 'linear-gradient(135deg,#6B4FE8,#FF4E9A)', text: '<strong>@planetmoney</strong> liked your comment', time: '14m ago', thumb: true },
-  { av: 'HI', color: 'linear-gradient(135deg,#00C4A4,#00A8FF)', text: '<strong>@howibuiltthis</strong> started following you', time: '1h ago', thumb: false },
-];
-
-const ACTIVITY_OLD = [
-  { av: 'AM', color: 'linear-gradient(135deg,#FF4E9A,#FF8C5E)', text: '<strong>@alexmyers</strong> tipped you $5', time: '3h ago', thumb: true, icon: 'ti-coin' },
-  { av: 'LW', color: 'linear-gradient(135deg,#5E9CFF,#7B5EFF)', text: '<strong>@lisawong</strong> saved your clip', time: '5h ago', thumb: true },
-  { av: 'DK', color: 'linear-gradient(135deg,#7BFF5E,#00D4B4)', text: 'Your clip hit <strong>10K plays</strong> 🎉', time: 'Yesterday', thumb: false },
-];
-
-const LIVE_SESSIONS = [
-  { title: 'Live Market Coverage — Fed Decision', host: 'CNBC Fast Money', listeners: '8,204', gifts: '142', color: 'linear-gradient(135deg,#00C4A4,#00A8FF)' },
-  { title: 'VC Panel: What Investors Really Want', host: 'Sarah Michaels', listeners: '847', gifts: '32', color: 'linear-gradient(135deg,#6B4FE8,#FF4E9A)' },
-  { title: 'Open Mic Comedy Night', host: 'Mike Davis', listeners: '512', gifts: '156', color: 'linear-gradient(135deg,#FFB347,#FF6B6B)' },
-];
-
-// Called once user logs in
-function initApp() {
-  buildDiscover();
-  buildCreatePage();
-  buildActivity();
-  buildLive();
-  buildFeed();
-  loadRSSFeeds();
-  wireAppEvents();
+function getGradient(clip) {
+  const k = (clip.creator || '').toLowerCase();
+  for (const [key, c] of Object.entries(GRADIENTS)) {
+    if (k.includes(key)) return c;
+  }
+  return GRADIENTS[clip.cat] || GRADIENTS['News'];
 }
 
-function wireAppEvents() {
-  // ── Sidebar nav items ──
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => switchView(item.dataset.view));
+function gradCSS(colors) {
+  return `radial-gradient(ellipse at top left, ${colors[0]} 0%, ${colors[1]} 50%, ${colors[2]} 100%)`;
+}
+
+function initials(name) {
+  return (name || 'N').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+// ── STATE ──
+let clips = [], currentIdx = 0, isPlaying = false;
+let progInterval = null, clipProg = {}, liked = {}, saved = {}, following = {};
+let speed = 1, currentUser = null, commentClip = null, allComments = {};
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
+const audio = new Audio();
+audio.preload = 'none';
+
+audio.addEventListener('timeupdate', () => {
+  const c = clips[currentIdx];
+  if (!c || !audio.duration) return;
+  const pct = (audio.currentTime / audio.duration) * 100;
+  clipProg[c.id] = pct;
+  updateProg(c.id, pct, audio.currentTime);
+});
+audio.addEventListener('ended', () => { isPlaying = false; updateIcons(); setTimeout(nextClip, 800); });
+audio.addEventListener('error', () => fakeProg());
+
+const fmtT = s => { s = Math.floor(s || 0); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; };
+
+function updateProg(id, pct, elapsed) {
+  const f = document.getElementById('pf-' + id);
+  if (f) f.style.width = pct + '%';
+  const t = document.getElementById('et-' + id);
+  if (t && elapsed !== undefined) t.textContent = fmtT(elapsed);
+  const pbf = document.getElementById('pb-fill');
+  if (pbf) pbf.style.width = pct + '%';
+  animateWave(id, pct);
+}
+
+function animateWave(id, pct) {
+  document.querySelectorAll(`#wv-${id} .wv-bar`).forEach((b, i) => {
+    const bp = (i / 44) * 100;
+    b.style.background = bp < pct ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.2)';
+    if (isPlaying && bp >= pct && bp < pct + 6) b.style.height = (5 + Math.random() * 28) + 'px';
+  });
+}
+
+function buildWave(id, pct = 0) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < 44; i++) {
+    const b = document.createElement('div');
+    b.className = 'wv-bar';
+    b.style.cssText = `height:${5 + Math.random() * 26}px;background:${(i/44*100) < pct ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.2)'}`;
+    el.appendChild(b);
+  }
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── LISTEN NOTES ──
+const LN_KEY = 'aaca221d7d284540bdc63cdeb09037da';
+const LN_BASE = 'https://listen-api.listennotes.com/api/v2';
+const LN_SEARCHES = [
+  {q:'breaking news today', cat:'News'},
+  {q:'philosophy wisdom life', cat:'Issues'},
+  {q:'entrepreneurship health money', cat:'Lifestyle'},
+  {q:'comedy funny storytelling', cat:'Entertainment'},
+];
+
+async function searchLN(query, cat) {
+  try {
+    const res = await fetch(`${LN_BASE}/search?q=${encodeURIComponent(query)}&type=episode&len_min=1&len_max=10&safe_mode=0&language=English`, {
+      headers: {'X-ListenAPI-Key': LN_KEY}
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.results || []).slice(0, 3).map((ep, i) => ({
+      id: 'ln_' + Date.now() + '_' + i,
+      title: (ep.title_original || '').slice(0, 80),
+      creator: ep.podcast?.title_original || 'Podcast',
+      desc: (ep.description_original || '').replace(/<[^>]+>/g, '').slice(0, 120),
+      tags: '#' + cat.toLowerCase() + ' #podcast',
+      cat, duration: 75,
+      plays: Math.floor(Math.random() * 500 + 10) + 'K',
+      likes: Math.floor(Math.random() * 50 + 1) + 'K',
+      audioUrl: (ep.audio || '') + '#t=' + Math.floor((ep.audio_length_sec || 300) * 0.25),
+      podcastImage: ep.image || ep.podcast?.image || '',
+    }));
+  } catch(e) { return []; }
+}
+
+// ── LOAD CLIPS ──
+async function loadClips() {
+  const el = document.getElementById('feed-loading');
+  if (el) el.style.display = 'flex';
+  let dbClips = [], lnClips = [];
+  try {
+    const {data, error} = await db.from('clips').select('*').eq('status', 'published').order('created_at', {ascending: false});
+    if (!error && data?.length) {
+      dbClips = data.map(c => ({
+        id: c.id, title: c.title,
+        creator: c.rss_source || 'The Nile',
+        desc: c.description || '',
+        tags: (c.hashtags || []).map(t => '#' + t).join(' '),
+        cat: c.category || 'Issues',
+        duration: c.duration_seconds || 75,
+        plays: c.play_count || 0, likes: c.like_count || 0,
+        audioUrl: c.audio_url || '', podcastImage: '',
+      }));
+    }
+  } catch(e) {}
+  try {
+    const results = await Promise.allSettled(LN_SEARCHES.slice(0, 3).map(s => searchLN(s.q, s.cat)));
+    results.forEach(r => { if (r.status === 'fulfilled') lnClips.push(...r.value); });
+  } catch(e) {}
+
+  // Interleave DB and podcast clips
+  const merged = [];
+  let di = 0, li = 0;
+  while (di < dbClips.length || li < lnClips.length) {
+    if (di < dbClips.length) merged.push(dbClips[di++]);
+    if (di < dbClips.length) merged.push(dbClips[di++]);
+    if (li < lnClips.length) merged.push(lnClips[li++]);
+  }
+  clips = merged.length ? merged : [{id:'f1',title:'Welcome to The Nile',creator:'The Nile',desc:'Your feed is loading.',tags:'#nile',cat:'News',duration:75,plays:0,likes:0,audioUrl:'',podcastImage:''}];
+  if (el) el.style.display = 'none';
+  buildFeed();
+  toast(clips.length + ' clips ready');
+}
+
+// ── BUILD FEED ──
+function buildFeed() {
+  const container = document.getElementById('feed-scroll');
+  if (!container) return;
+  container.innerHTML = '';
+  clips.forEach((clip, i) => {
+    const pct = clipProg[clip.id] || 0;
+    const elapsed = Math.floor((clip.duration || 0) * pct / 100);
+    const colors = getGradient(clip);
+    const bg = gradCSS(colors);
+    const hasPodcastImg = !!clip.podcastImage;
+    const cardBg = hasPodcastImg ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center` : `background:${bg}`;
+
+    const card = document.createElement('div');
+    card.className = 'clip-card';
+    card.id = 'card-' + clip.id;
+    card.innerHTML = `
+      <div class="clip-card-bg" style="${cardBg}"></div>
+      <div class="clip-inner" style="${hasPodcastImg ? '' : `background:${bg}`}">
+        ${hasPodcastImg ? `<div class="clip-inner-bg" style="background-image:url(${clip.podcastImage});background-size:cover;background-position:center"></div>` : `<div class="clip-inner-bg" style="background:${bg}"></div>`}
+        <div class="clip-inner-overlay"></div>
+        <div class="clip-top">
+          <span class="clip-cat-pill">${clip.cat}</span>
+          <span class="clip-num">${String(i+1).padStart(2,'0')} / ${String(clips.length).padStart(2,'0')}</span>
+        </div>
+        <div class="clip-bottom">
+          <div class="clip-creator-row">
+            <div class="clip-av" style="${hasPodcastImg ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center` : `background:${bg}`}">${!hasPodcastImg ? initials(clip.creator) : ''}</div>
+            <span class="clip-creator-name">${clip.creator}</span>
+            <button class="clip-follow ${following[clip.id]?'following':''}" id="fp-${clip.id}" onclick="toggleFollow('${clip.id}')">${following[clip.id]?'Following':'Follow'}</button>
+          </div>
+          <div class="clip-title">${clip.title}</div>
+          ${clip.desc ? `<div class="clip-desc">${clip.desc.slice(0,100)}</div>` : ''}
+          <div class="clip-tags">${clip.tags}</div>
+          <div class="clip-player">
+            <div class="waveform" id="wv-${clip.id}" onclick="seekWave(event,'${clip.id}')"></div>
+            <div class="prog-row">
+              <span class="clip-time" id="et-${clip.id}">${fmtT(elapsed)}</span>
+              <div class="prog-track" onclick="seekTrack(event,'${clip.id}')"><div class="prog-fill" id="pf-${clip.id}" style="width:${pct}%"></div></div>
+              <span class="clip-time">${fmtT(clip.duration)}</span>
+            </div>
+            <div class="ctrl-row">
+              <button class="ctrl-btn" onclick="rew('${clip.id}')"><i class="ti ti-rewind-10"></i></button>
+              <button class="ctrl-btn" onclick="prevClip()"><i class="ti ti-skip-back"></i></button>
+              <button class="play-btn" onclick="togglePlay('${clip.id}')"><i class="ti ${i===currentIdx&&isPlaying?'ti-player-pause':'ti-player-play'}" id="pi-${clip.id}"></i></button>
+              <button class="ctrl-btn" onclick="nextClip()"><i class="ti ti-skip-forward"></i></button>
+              <button class="speed-btn" onclick="cycleSpeed()">${speed}x</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clip-actions">
+        <div class="act-av-wrap">
+          <div class="act-av" style="${hasPodcastImg ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center` : `background:${bg}`}">${!hasPodcastImg ? initials(clip.creator) : ''}</div>
+          <div class="act-plus">+</div>
+        </div>
+        <div class="act-btn ${liked[clip.id]?'liked':''}" onclick="toggleLike('${clip.id}',this)">
+          <div class="act-icon"><i class="ti ti-heart"></i></div>
+          <span class="act-count" id="lc-${clip.id}">${typeof clip.likes==='number'&&clip.likes>999?(clip.likes/1000).toFixed(1)+'K':clip.likes}</span>
+        </div>
+        <div class="act-btn" onclick="openComments('${clip.id}')">
+          <div class="act-icon"><i class="ti ti-message-circle-2"></i></div>
+          <span class="act-count">${(allComments[clip.id]||[]).length||0}</span>
+        </div>
+        <div class="act-btn ${saved[clip.id]?'saved':''}" onclick="toggleSave('${clip.id}',this)">
+          <div class="act-icon"><i class="ti ti-bookmark"></i></div>
+        </div>
+        <div class="act-btn" onclick="shareClip('${clip.id}')">
+          <div class="act-icon"><i class="ti ti-share-2"></i></div>
+          <span class="act-count">${typeof clip.plays==='number'&&clip.plays>999?(clip.plays/1000).toFixed(1)+'K':clip.plays}</span>
+        </div>
+      </div>`;
+    container.appendChild(card);
+    buildWave('wv-' + clip.id, pct);
   });
 
-  // ── Mobile nav items ──
-  document.querySelectorAll('.mob-item').forEach(item => {
-    item.addEventListener('click', () => {
-      if (item.dataset.view) switchView(item.dataset.view);
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.intersectionRatio > 0.75) {
+        const id = e.target.id.replace('card-', '');
+        const idx = clips.findIndex(c => String(c.id) === id);
+        if (idx !== -1 && idx !== currentIdx) {
+          stopAudio(); currentIdx = idx; isPlaying = true; updateIcons(); startAudio(); updateBar();
+        }
+      }
+    });
+  }, {threshold: 0.75});
+  container.querySelectorAll('.clip-card').forEach(el => obs.observe(el));
+  updateBar();
+}
+
+function updateIcons() {
+  clips.forEach(c => {
+    const el = document.getElementById('pi-' + c.id);
+    if (el) el.className = 'ti ' + (String(c.id) === String(clips[currentIdx]?.id) && isPlaying ? 'ti-player-pause' : 'ti-player-play');
+  });
+  const pb = document.getElementById('pb-icon');
+  if (pb) pb.className = 'ti ' + (isPlaying ? 'ti-player-pause' : 'ti-player-play');
+}
+
+function updateBar() {
+  const c = clips[currentIdx]; if (!c) return;
+  const bar = document.getElementById('player-bar');
+  if (bar) bar.style.display = 'flex';
+  const t = document.getElementById('pb-title'), s = document.getElementById('pb-source');
+  if (t) t.textContent = c.title;
+  if (s) s.textContent = c.creator + ' · ' + c.cat;
+}
+
+function togglePlay(id) {
+  if (String(id) !== String(clips[currentIdx]?.id)) { stopAudio(); currentIdx = clips.findIndex(c => String(c.id) === String(id)); }
+  isPlaying = !isPlaying; updateIcons();
+  if (isPlaying) startAudio(); else stopAudio(); updateBar();
+}
+
+function startAudio() {
+  const c = clips[currentIdx]; if (!c) return;
+  if (c.audioUrl) {
+    if (audio.src !== c.audioUrl) { audio.src = c.audioUrl; clipProg[c.id] = 0; }
+    audio.playbackRate = speed;
+    audio.play().catch(() => fakeProg());
+  } else fakeProg();
+}
+
+function stopAudio() { audio.pause(); if (progInterval) { clearInterval(progInterval); progInterval = null; } }
+
+function fakeProg() {
+  if (progInterval) clearInterval(progInterval);
+  const c = clips[currentIdx]; if (!c) return;
+  progInterval = setInterval(() => {
+    const cur = clipProg[c.id] || 0, step = (100 / c.duration) * 0.1 * speed;
+    const np = Math.min(100, cur + step); clipProg[c.id] = np;
+    updateProg(c.id, np, c.duration * np / 100);
+    if (np >= 100) { clearInterval(progInterval); progInterval = null; isPlaying = false; updateIcons(); setTimeout(nextClip, 800); }
+  }, 100);
+}
+
+function nextClip() {
+  stopAudio(); currentIdx = (currentIdx + 1) % clips.length;
+  document.getElementById('card-' + clips[currentIdx].id)?.scrollIntoView({behavior: 'smooth', block: 'start'});
+  isPlaying = true; updateIcons(); startAudio(); updateBar();
+}
+
+function prevClip() {
+  stopAudio(); currentIdx = (currentIdx - 1 + clips.length) % clips.length;
+  document.getElementById('card-' + clips[currentIdx].id)?.scrollIntoView({behavior: 'smooth', block: 'start'});
+  isPlaying = true; updateIcons(); startAudio(); updateBar();
+}
+
+function seekTrack(e, id) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+  clipProg[id] = pct;
+  const c = clips.find(c => String(c.id) === String(id));
+  if (c?.audioUrl && audio.duration) audio.currentTime = (pct / 100) * audio.duration;
+  buildWave('wv-' + id, pct);
+}
+function seekWave(e, id) { seekTrack(e, id); }
+function rew(id) {
+  const c = clips.find(c => String(c.id) === String(id)); if (!c) return;
+  clipProg[id] = Math.max(0, (clipProg[id] || 0) - (10 / c.duration) * 100);
+  if (c.audioUrl && audio.duration) audio.currentTime = Math.max(0, audio.currentTime - 10);
+  buildWave('wv-' + id, clipProg[id]);
+}
+function cycleSpeed() {
+  speed = SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length];
+  document.querySelectorAll('.speed-btn').forEach(b => b.textContent = speed + 'x');
+  audio.playbackRate = speed; toast('Speed: ' + speed + 'x');
+}
+function toggleLike(id, el) {
+  liked[id] = !liked[id]; el.classList.toggle('liked', liked[id]);
+  const icon = el.querySelector('i');
+  if (icon) icon.className = liked[id] ? 'ti ti-heart-filled' : 'ti ti-heart';
+}
+function toggleSave(id, el) { saved[id] = !saved[id]; el.classList.toggle('saved', saved[id]); toast(saved[id] ? 'Saved!' : 'Removed'); }
+function toggleFollow(id) {
+  following[id] = !following[id];
+  const btn = document.getElementById('fp-' + id);
+  if (btn) { btn.classList.toggle('following', following[id]); btn.textContent = following[id] ? 'Following' : 'Follow'; }
+  toast(following[id] ? 'Following!' : 'Unfollowed');
+}
+function shareClip(id) { if (navigator.clipboard) { navigator.clipboard.writeText(location.href + '#' + id); toast('Link copied!'); } }
+
+function openComments(id) {
+  commentClip = id;
+  const list = document.getElementById('comments-list');
+  list.innerHTML = '';
+  const cc = allComments[id] || [];
+  if (!cc.length) list.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted2);font-size:14px">No comments yet. Be the first.</div>';
+  else cc.forEach(c => {
+    const d = document.createElement('div'); d.className = 'comment-item';
+    d.innerHTML = `<div class="comment-av">${c.user.slice(1,3).toUpperCase()}</div><div><div class="comment-user">${c.user}</div><div class="comment-text">${c.text}</div><div class="comment-time">${c.time}</div></div>`;
+    list.appendChild(d);
+  });
+  document.getElementById('comments-modal').style.display = 'flex';
+}
+
+// ── NAV ──
+function switchView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn, .mob-item').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById('view-' + v);
+  if (target) target.classList.add('active');
+  document.querySelectorAll(`[data-view="${v}"]`).forEach(el => el.classList.add('active'));
+  if (v === 'profile') buildProfile();
+  if (v === 'discover') buildDiscover();
+}
+
+// ── DISCOVER ──
+const CATS = ['All','News','Issues','Lifestyle','Entertainment','Philosophy','History'];
+const ICONS_MAP = {All:'ti-apps',News:'ti-news',Issues:'ti-world',Lifestyle:'ti-heart',Entertainment:'ti-masks-theater',Philosophy:'ti-yin-yang',History:'ti-hourglass'};
+const TRENDING = [{rank:1,tag:'#Stoicism',clips:'48K'},{rank:2,tag:'#DailyNews',clips:'41K'},{rank:3,tag:'#MarcusAurelius',clips:'32K'},{rank:4,tag:'#Lifestyle',clips:'27K'},{rank:5,tag:'#Literature',clips:'19K'},{rank:6,tag:'#BigIdeas',clips:'16K'}];
+const CREATORS_DATA = [
+  {name:'Marcus Aurelius',handle:'@marcusaurelius',followers:'2.1M',colors:['#1a0a2e','#2d1b69','#0f3460']},
+  {name:'Dale Carnegie',handle:'@dalecarnegie',followers:'890K',colors:['#0f2027','#203a43','#2c5364']},
+  {name:'Sun Tzu',handle:'@suntzu',followers:'1.4M',colors:['#16222a','#3a6073','#1a1a2e']},
+  {name:'Seneca',handle:'@seneca',followers:'780K',colors:['#2c1810','#6b3a2a','#1a0a05']},
+  {name:'Shakespeare',handle:'@shakespeare',followers:'3.2M',colors:['#1a0505','#3a0d0d','#1a0202']},
+  {name:'Confucius',handle:'@confucius',followers:'1.1M',colors:['#1a0d05','#3a2010','#1a1005']},
+];
+
+let discoverBuilt = false;
+function buildDiscover() {
+  if (discoverBuilt) return;
+  discoverBuilt = true;
+
+  const cp = document.getElementById('cat-pills');
+  CATS.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-pill' + (c === 'All' ? ' active' : '');
+    btn.innerHTML = `<i class="ti ${ICONS_MAP[c]}"></i>${c}`;
+    btn.onclick = () => {
+      document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (c !== 'All') {
+        const filtered = clips.filter(clip => clip.cat === c);
+        if (filtered.length) { clips = filtered; currentIdx = 0; buildFeed(); switchView('feed'); toast('Showing ' + c); }
+      } else { loadClips(); switchView('feed'); }
+    };
+    cp.appendChild(btn);
+  });
+
+  const tl = document.getElementById('trending-list');
+  TRENDING.forEach(t => {
+    const d = document.createElement('div'); d.className = 'trend-item';
+    d.innerHTML = `<span class="trend-rank">${t.rank}</span><div><div class="trend-name">${t.tag}</div><div class="trend-count">${t.clips} clips</div></div><i class="ti ti-chevron-right" style="margin-left:auto;color:var(--muted2)"></i>`;
+    d.onclick = () => { toast('Filtering by ' + t.tag); switchView('feed'); };
+    tl.appendChild(d);
+  });
+
+  const cg = document.getElementById('creators-grid');
+  CREATORS_DATA.forEach(c => {
+    const bg = gradCSS(c.colors);
+    const d = document.createElement('div'); d.className = 'creator-card';
+    d.innerHTML = `<div class="cr-av" style="background:${bg}">${initials(c.name)}</div><div class="cr-name">${c.name}</div><div class="cr-handle">${c.handle}</div><div style="font-family:var(--mono);font-size:10px;color:var(--muted2);margin-bottom:8px">${c.followers}</div><button class="cr-follow">Subscribe</button>`;
+    d.querySelector('.cr-follow').onclick = function(e) {
+      e.stopPropagation();
+      this.classList.toggle('following');
+      this.textContent = this.classList.contains('following') ? 'Subscribed' : 'Subscribe';
+      toast(this.classList.contains('following') ? 'Subscribed to ' + c.name : 'Unsubscribed');
+    };
+    cg.appendChild(d);
+  });
+}
+
+// ── PROFILE ──
+function buildProfile() {
+  if (!currentUser) return;
+  const meta = currentUser.user_metadata || {};
+  const name = meta.full_name || currentUser.email?.split('@')[0] || 'User';
+  const username = meta.username || name.toLowerCase().replace(/\s+/g, '');
+  document.getElementById('profile-cover-text').textContent = name.split(' ')[0];
+  document.getElementById('profile-avatar').textContent = initials(name);
+  document.getElementById('profile-name').textContent = name;
+  document.getElementById('profile-handle').textContent = '@' + username;
+  document.querySelectorAll('.ptab').forEach(t => {
+    t.onclick = function() {
+      document.querySelectorAll('.ptab').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.ptab-content').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+      const tc = document.getElementById('ptab-' + this.dataset.ptab);
+      if (tc) tc.classList.add('active');
+    };
+  });
+  // About tab
+  const about = document.getElementById('about-section');
+  if (about) about.innerHTML = `
+    <div style="padding:20px 0">
+      <div style="font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Platform</div>
+      <div style="font-size:14px;color:var(--text);margin-bottom:20px">The Nile — News. Issues. Lifestyle. Entertainment.</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Member Since</div>
+      <div style="font-size:14px;color:var(--text)">${new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
+    </div>`;
+}
+
+// ── AUTH ──
+async function initAuth() {
+  const {data:{session}} = await db.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    document.getElementById('auth-screen').style.display = 'none';
+    updateSidebarUser();
+    await loadClips();
+  } else {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('feed-loading').style.display = 'none';
+  }
+
+  db.auth.onAuthStateChange((_, sess) => {
+    if (sess) { currentUser = sess.user; document.getElementById('auth-screen').style.display = 'none'; updateSidebarUser(); loadClips(); }
+    else { currentUser = null; document.getElementById('auth-screen').style.display = 'flex'; }
+  });
+
+  document.getElementById('tab-login').onclick = () => {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-login').classList.add('active');
+    document.getElementById('form-login').style.display = 'block';
+    document.getElementById('form-signup').style.display = 'none';
+  };
+  document.getElementById('tab-signup').onclick = () => {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-signup').classList.add('active');
+    document.getElementById('form-login').style.display = 'none';
+    document.getElementById('form-signup').style.display = 'block';
+  };
+  document.getElementById('to-signup').onclick = () => document.getElementById('tab-signup').click();
+  document.getElementById('to-login').onclick = () => document.getElementById('tab-login').click();
+
+  document.getElementById('form-login').onsubmit = async e => {
+    e.preventDefault();
+    const btn = e.target.querySelector('.auth-submit'); btn.textContent = 'Signing in...'; btn.disabled = true;
+    const {error} = await db.auth.signInWithPassword({email: document.getElementById('login-email').value, password: document.getElementById('login-pw').value});
+    if (error) { const el = document.getElementById('auth-err'); el.textContent = error.message; el.style.display = 'block'; }
+    btn.textContent = 'Sign In →'; btn.disabled = false;
+  };
+
+  document.getElementById('form-signup').onsubmit = async e => {
+    e.preventDefault();
+    const btn = e.target.querySelector('.auth-submit'); btn.textContent = 'Creating...'; btn.disabled = true;
+    const {error} = await db.auth.signUp({
+      email: document.getElementById('signup-email').value,
+      password: document.getElementById('signup-pw').value,
+      options: {data: {full_name: document.getElementById('signup-name').value, username: document.getElementById('signup-user').value}}
+    });
+    if (error) { const el = document.getElementById('auth-err'); el.textContent = error.message; el.style.display = 'block'; }
+    else { const el = document.getElementById('auth-ok'); el.textContent = 'Account created! Check your email.'; el.style.display = 'block'; }
+    btn.textContent = 'Subscribe Free →'; btn.disabled = false;
+  };
+}
+
+function updateSidebarUser() {
+  if (!currentUser) return;
+  const meta = currentUser.user_metadata || {};
+  const name = meta.full_name || currentUser.email?.split('@')[0] || 'User';
+  const username = meta.username || name.toLowerCase().replace(/\s+/g, '');
+  document.getElementById('sidebar-name').textContent = name;
+  document.getElementById('sidebar-handle').textContent = '@' + username;
+  document.getElementById('sidebar-av').textContent = initials(name);
+}
+
+// ── WIRE EVENTS ──
+function wireEvents() {
+  document.querySelectorAll('[data-view]').forEach(btn => btn.addEventListener('click', () => switchView(btn.dataset.view)));
+
+  document.querySelectorAll('[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      const filtered = clips.filter(c => c.cat === cat);
+      if (filtered.length) { const orig = [...clips]; clips = filtered; currentIdx = 0; buildFeed(); switchView('feed'); toast('Showing ' + cat); setTimeout(() => { clips = orig; }, 60000); }
+      else { switchView('feed'); toast('Loading ' + cat + '...'); }
     });
   });
 
-  // ── Feed tabs ──
   document.querySelectorAll('.feed-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      if (tab.dataset.feed === 'following') showToast('Showing clips from people you follow');
+      if (tab.dataset.feed === 'following') toast('Showing voices you follow');
     });
   });
 
-  // ── Feed arrows ──
-  const btnPrev = document.getElementById('btn-prev');
-  const btnNext = document.getElementById('btn-next');
-  if (btnPrev) btnPrev.addEventListener('click', prevClip);
-  if (btnNext) btnNext.addEventListener('click', nextClip);
+  document.getElementById('btn-prev')?.addEventListener('click', prevClip);
+  document.getElementById('btn-next')?.addEventListener('click', nextClip);
+  document.getElementById('pb-play')?.addEventListener('click', () => togglePlay(clips[currentIdx]?.id));
+  document.getElementById('pb-next-btn')?.addEventListener('click', nextClip);
+  document.getElementById('pb-rew')?.addEventListener('click', () => rew(clips[currentIdx]?.id));
 
-  // ── Player bar ──
-  const pbPlay = document.getElementById('pb-play');
-  const pbNext = document.getElementById('pb-next');
-  const pbRewind = document.getElementById('pb-rewind');
-  const playerProgress = document.getElementById('player-progress');
-  if (pbPlay) pbPlay.addEventListener('click', () => togglePlay(clips[currentIdx]?.id));
-  if (pbNext) pbNext.addEventListener('click', nextClip);
-  if (pbRewind) pbRewind.addEventListener('click', () => rewind10(clips[currentIdx]?.id));
-  if (playerProgress) {
-    playerProgress.addEventListener('click', (e) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const pct = ((e.clientX - rect.left) / rect.width) * 100;
-      const clip = clips[currentIdx];
-      if (clip) {
-        clipProgress[clip.id] = pct;
-        if (audioEl.duration) audioEl.currentTime = (pct / 100) * audioEl.duration;
-        const fill = document.getElementById('player-fill');
-        if (fill) fill.style.width = pct + '%';
-      }
-    });
-  }
-
-  // ── Comments modal ──
-  const commentsModal = document.getElementById('modal-comments');
-  if (commentsModal) {
-    commentsModal.addEventListener('click', (e) => {
-      if (e.target === commentsModal) commentsModal.style.display = 'none';
-    });
-  }
-  const sendCommentBtn = document.getElementById('btn-send-comment');
-  const commentInput = document.getElementById('comment-input');
-  if (sendCommentBtn) sendCommentBtn.addEventListener('click', sendComment);
-  if (commentInput) commentInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendComment(); });
-
-  // ── Create page ──
-  const uploadBtn = document.getElementById('upload-btn');
-  const fileUpload = document.getElementById('file-upload');
-  const publishBtn = document.getElementById('btn-publish');
-  const recBtn = document.getElementById('rec-btn');
-  const createFirst = document.getElementById('btn-create-first');
-  if (uploadBtn) uploadBtn.addEventListener('click', () => fileUpload?.click());
-  if (fileUpload) fileUpload.addEventListener('change', (e) => {
-    const f = e.target.files[0];
-    if (f) showToast('File loaded: ' + f.name);
-  });
-  if (publishBtn) publishBtn.addEventListener('click', publishClip);
-  if (recBtn) recBtn.addEventListener('click', toggleRecord);
-  if (createFirst) createFirst.addEventListener('click', () => switchView('create'));
-
-  // ── Live page ──
-  const goLive = document.getElementById('btn-go-live');
-  if (goLive) goLive.addEventListener('click', () => showToast('Live broadcasting coming soon!'));
-
-  // ── Profile ──
-  const editProfile = document.getElementById('btn-edit-profile');
-  const shareProfile = document.getElementById('btn-share-profile');
-  if (editProfile) editProfile.addEventListener('click', () => showToast('Edit profile coming soon'));
-  if (shareProfile) shareProfile.addEventListener('click', () => {
-    if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-    showToast('Profile link copied!');
+  document.getElementById('comments-modal')?.addEventListener('click', e => { if (e.target === document.getElementById('comments-modal')) document.getElementById('comments-modal').style.display = 'none'; });
+  document.getElementById('send-comment')?.addEventListener('click', () => {
+    const input = document.getElementById('comment-input');
+    const text = input.value.trim(); if (!text || !commentClip) return;
+    if (!allComments[commentClip]) allComments[commentClip] = [];
+    allComments[commentClip].push({user: '@' + (currentUser?.user_metadata?.username || 'you'), text, time: 'just now'});
+    openComments(commentClip); input.value = '';
   });
 
-  // ── Sidebar edition items ──
-  document.querySelectorAll('.edition-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const text = item.textContent.trim();
-      const cat = text.replace(/^[NILE§·\s]+/, '').trim();
-      const filtered = clips.filter(c => c.cat === cat);
-      if (filtered.length > 0) {
-        clips = [...filtered];
-        currentIdx = 0;
-        buildFeed();
-        switchView('feed');
-        showToast('Showing ' + cat);
-      } else {
-        switchView('feed');
-        showToast('Loading ' + cat + '...');
-      }
-    });
+  document.getElementById('btn-signout')?.addEventListener('click', () => {
+    if (confirm('Sign out of The Nile?')) db.auth.signOut();
   });
 
-  // ── Keyboard shortcuts ──
-  document.addEventListener('keydown', (e) => {
-    if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-    if (document.getElementById('page-app').style.display === 'none') return;
+  document.getElementById('sidebar-user')?.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    if (confirm('Sign out?')) db.auth.signOut();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
     if (e.key === 'ArrowDown') nextClip();
-    if (e.key === 'ArrowUp') prevClip();
-    if (e.key === ' ') { e.preventDefault(); togglePlay(clips[currentIdx]?.id); }
+    else if (e.key === 'ArrowUp') prevClip();
+    else if (e.key === ' ') { e.preventDefault(); togglePlay(clips[currentIdx]?.id); }
   });
 }
 
-// ── DISCOVER ──
-function buildDiscover() {
-  const CATS = ['All', 'News', 'Issues', 'Lifestyle', 'Entertainment', 'Philosophy', 'History'];
-  const ICONS = { All: 'ti-apps', News: 'ti-news', Issues: 'ti-world', Lifestyle: 'ti-heart', Entertainment: 'ti-masks-theater', Philosophy: 'ti-yin-yang', History: 'ti-hourglass' };
-
-  const catsEl = document.getElementById('discover-cats');
-  CATS.forEach(cat => {
-    const el = document.createElement('div');
-    el.className = 'disc-cat' + (cat === 'All' ? ' active' : '');
-    el.innerHTML = `<i class="ti ${ICONS[cat]}"></i>${cat}`;
-    el.onclick = function () {
-      document.querySelectorAll('.disc-cat').forEach(c => c.classList.remove('active'));
-      this.classList.add('active');
-      if (cat !== 'All') {
-        const filtered = clips.filter(c => c.cat === cat);
-        if (filtered.length) { clips = filtered; currentIdx = 0; buildFeed(); switchView('feed'); }
-        else showToast('No ' + cat + ' clips yet');
-      } else {
-        loadRSSFeeds();
-        switchView('feed');
-      }
-    };
-    catsEl.appendChild(el);
-  });
-
-  const trendingEl = document.getElementById('trending-list');
-  TRENDING.forEach(t => {
-    const item = document.createElement('div');
-    item.className = 'trend-item';
-    item.innerHTML = `
-      <span class="trend-rank">${t.rank}</span>
-      <div>
-        <div class="trend-name">${t.tag}</div>
-        <div class="trend-count">${t.clips} clips</div>
-      </div>
-      <i class="ti ti-arrow-right" style="margin-left:auto;color:var(--muted);font-size:16px"></i>`;
-    item.onclick = () => {
-      switchView('feed');
-      showToast('Showing ' + t.tag);
-    };
-    trendingEl.appendChild(item);
-  });
-
-  const creatorsEl = document.getElementById('creators-grid');
-  CREATORS.forEach(c => {
-    creatorsEl.innerHTML += `
-      <div class="creator-card">
-        <div class="big-av" style="background:${c.color}">${c.initials}</div>
-        <div class="cr-name">${c.name}</div>
-        <div class="cr-handle">${c.handle}</div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${c.followers}</div>
-        <button class="cr-follow" onclick="this.classList.toggle('following');this.textContent=this.classList.contains('following')?'Following':'Follow'">Follow</button>
-      </div>`;
-  });
-
-  const searchInput = document.getElementById('discover-search');
-  if (searchInput) {
-    let searchTimeout;
-    searchInput.oninput = (e) => {
-      clearTimeout(searchTimeout);
-      const q = e.target.value.trim();
-      if (q.length > 2) {
-        searchTimeout = setTimeout(async () => {
-          showToast('Searching for "' + q + '"...');
-          const results = await searchListenNotes(q, 'News');
-          if (results.length > 0) {
-            clips = results;
-            currentIdx = 0;
-            buildFeed();
-            switchView('feed');
-            showToast(results.length + ' results for "' + q + '"');
-          } else {
-            showToast('No results found');
-          }
-        }, 600);
-      }
-    };
-  }
-}
-
-// ── CREATE ──
-function buildCreatePage() {
-  const vizEl = document.getElementById('rec-viz');
-  for (let i = 0; i < 24; i++) {
-    const b = document.createElement('div');
-    b.className = 'rv-bar';
-    b.style.height = '20px';
-    vizEl.appendChild(b);
-  }
-
-  const durRow = document.getElementById('duration-row');
-  ['30s', '60s', '3 min', '10 min'].forEach((d, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'dur-btn' + (i === 0 ? ' active' : '');
-    btn.textContent = d;
-    btn.onclick = function () {
-      document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-    };
-    durRow.appendChild(btn);
-  });
-
-  // Tool items
-  document.querySelectorAll('.tool-item').forEach(item => {
-    const label = item.querySelector('span')?.textContent;
-    if (label && label !== 'Upload File') {
-      item.onclick = () => showToast(label + ' coming soon');
-    }
-  });
-}
-
-function toggleRecord() {
-  isRecording = !isRecording;
-  const btn = document.getElementById('rec-btn');
-  const icon = document.getElementById('rec-icon');
-  const status = document.getElementById('rec-status');
-
-  btn.classList.toggle('recording', isRecording);
-  icon.className = 'ti ' + (isRecording ? 'ti-player-stop' : 'ti-microphone');
-  status.textContent = isRecording ? 'Recording... tap to stop' : 'Tap to record';
-
-  if (isRecording) {
-    recSeconds = 0;
-    recTimerInterval = setInterval(() => {
-      recSeconds++;
-      const m = Math.floor(recSeconds / 60);
-      document.getElementById('rec-timer').textContent = `${m}:${String(recSeconds % 60).padStart(2, '0')}`;
-    }, 1000);
-    recAnimInterval = setInterval(() => {
-      document.querySelectorAll('.rv-bar').forEach(b => { b.style.height = (6 + Math.random() * 68) + 'px'; });
-    }, 120);
-    if (navigator.mediaDevices) {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
-      }).catch(() => showToast('Microphone permission needed'));
-    }
-  } else {
-    clearInterval(recTimerInterval);
-    clearInterval(recAnimInterval);
-    document.querySelectorAll('.rv-bar').forEach(b => { b.style.height = '20px'; });
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      mediaRecorder.stop();
-      showToast('Recording saved! Fill in details below.');
-    }
-  }
-}
-
-async function publishClip() {
-  const title = document.getElementById('pub-title').value.trim();
-  if (!title) { showToast('Please add a title'); return; }
-  const btn = document.getElementById('btn-publish');
-  btn.textContent = 'Publishing...';
-  btn.disabled = true;
-  try {
-    if (currentUser && currentUser.id && !currentUser.id.startsWith('local-')) {
-      await db.from('clips').insert({
-        user_id: currentUser.id,
-        title,
-        description: document.getElementById('pub-desc').value.trim(),
-        hashtags: document.getElementById('pub-tags').value.trim().split(' '),
-        category: document.getElementById('pub-cat').value,
-        status: 'published',
-      });
-    }
-    showToast('Published to The Nile!');
-    ['pub-title', 'pub-desc', 'pub-tags'].forEach(id => { document.getElementById(id).value = ''; });
-    setTimeout(() => switchView('feed'), 1000);
-  } catch (e) {
-    showToast('Saved locally');
-  } finally {
-    btn.textContent = 'Publish to Sonair →';
-    btn.disabled = false;
-  }
-}
-
-// ── ACTIVITY ──
-function buildActivity() {
-  const newEl = document.getElementById('activity-new');
-  const oldEl = document.getElementById('activity-old');
-
-  ACTIVITY_NEW.forEach(a => {
-    newEl.innerHTML += `
-      <div class="activity-item">
-        <div class="act-av" style="background:${a.color}">${a.av}</div>
-        <div class="act-body">
-          <div class="act-text">${a.text}</div>
-          <div class="act-time">${a.time}</div>
-        </div>
-        ${a.thumb ? '<div class="act-thumb"><i class="ti ti-headphones"></i></div>' : ''}
-      </div>`;
-  });
-
-  ACTIVITY_OLD.forEach(a => {
-    oldEl.innerHTML += `
-      <div class="activity-item">
-        <div class="act-av" style="background:${a.color}">${a.av}</div>
-        <div class="act-body">
-          <div class="act-text">${a.text}</div>
-          <div class="act-time">${a.time}</div>
-        </div>
-        ${a.thumb ? `<div class="act-thumb"><i class="ti ${a.icon || 'ti-headphones'}"></i></div>` : ''}
-      </div>`;
-  });
-}
-
-// ── LIVE ──
-function buildLive() {
-  const listEl = document.getElementById('live-list');
-  LIVE_SESSIONS.forEach(s => {
-    listEl.innerHTML += `
-      <div class="live-card" onclick="showToast('Joining: ${s.title}')">
-        <div class="live-pill"><div class="live-dot"></div>LIVE</div>
-        <div class="live-card-title">${s.title}</div>
-        <div class="live-card-host">${s.host}</div>
-        <div class="live-card-stats">
-          <span><i class="ti ti-users" style="font-size:14px"></i> ${s.listeners} listening</span>
-          <span><i class="ti ti-gift" style="font-size:14px"></i> ${s.gifts} gifts</span>
-        </div>
-      </div>`;
-  });
-
-  document.getElementById('btn-go-live').onclick = () => showToast('Live broadcasting coming soon!');
-}
-
-// ── COMMENTS ──
-function sendComment() {
-  const input = document.getElementById('comment-input');
-  const text = input.value.trim();
-  if (!text) return;
-  if (!allComments[currentCommentClip]) allComments[currentCommentClip] = [];
-  const meta = currentUser?.user_metadata || {};
-  const handle = '@' + (meta.username || 'you');
-  allComments[currentCommentClip].unshift({ user: handle, text, time: 'just now' });
-  openComments(currentCommentClip);
-  input.value = '';
-}
-
-// ── HEADER SEARCH ──
-document.getElementById('btn-search-header').onclick = () => switchView('discover');
-
-// ═══════════════════════════════════════
-// CREATOR PROFILE
-// ═══════════════════════════════════════
-
-async function buildProfile() {
-  if (!currentUser) return;
-
-  const meta = currentUser.user_metadata || {};
-  const name = meta.full_name || currentUser.email.split('@')[0];
-  const username = meta.username || name.toLowerCase().replace(/\s+/g, '');
-  const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-
-  // Set cover watermark
-  const coverText = document.getElementById('profile-cover-text');
-  if (coverText) coverText.textContent = name.split(' ')[0];
-
-  // Set avatar
-  const av = document.getElementById('profile-avatar');
-  if (av) av.textContent = initials;
-
-  // Set name and handle
-  document.getElementById('profile-name').textContent = name;
-  document.getElementById('profile-handle').textContent = '@' + username;
-
-  // Set bio from Supabase if available
-  let bio = 'Creator at The Nile · N.I.L.E.';
-  let totalPlays = 0;
-  let followerCount = 0;
-  let followingCount = 0;
-  let clipCount = 0;
-  let userClips = [];
-
-  if (currentUser.id) {
-    try {
-      // Fetch profile
-      const { data: profile } = await db.from('profiles').select('*').eq('id', currentUser.id).single();
-      if (profile) {
-        bio = profile.bio || bio;
-        followerCount = profile.follower_count || 0;
-        followingCount = profile.following_count || 0;
-        totalPlays = profile.total_plays || 0;
-      }
-
-      // Fetch user's clips
-      const { data: clipsData } = await db.from('clips').select('*').eq('user_id', currentUser.id).eq('status', 'published').order('created_at', { ascending: false });
-      if (clipsData) {
-        userClips = clipsData;
-        clipCount = clipsData.length;
-        totalPlays = clipsData.reduce((sum, c) => sum + (c.play_count || 0), 0);
-      }
-    } catch(e) {
-      console.warn('Profile fetch error:', e);
-    }
-  }
-
-  // Update bio
-  document.getElementById('profile-bio').textContent = bio;
-
-  // Update stats
-  document.getElementById('stat-clips').textContent = clipCount;
-  document.getElementById('stat-followers').textContent = followerCount >= 1000 ? (followerCount/1000).toFixed(1) + 'K' : followerCount;
-  document.getElementById('stat-following').textContent = followingCount;
-  document.getElementById('stat-plays').textContent = totalPlays >= 1000 ? (totalPlays/1000).toFixed(1) + 'K' : totalPlays;
-
-  // Build tags
-  const tagsEl = document.getElementById('profile-tags');
-  if (tagsEl) {
-    const tags = ['Creator', 'The Nile', 'N.I.L.E.'];
-    tagsEl.innerHTML = tags.map(t => `<span class="profile-tag">${t}</span>`).join('');
-  }
-
-  // Build clips grid
-  buildProfileClipsGrid(userClips, name, initials);
-
-  // Build about section
-  buildAboutSection(name, username, currentUser.email);
-
-  // Wire up profile tabs
-  document.querySelectorAll('.profile-tab').forEach(tab => {
-    tab.onclick = function() {
-      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.ptab-content').forEach(c => c.classList.remove('active'));
-      this.classList.add('active');
-      const target = document.getElementById('ptab-' + this.dataset.ptab);
-      if (target) target.classList.add('active');
-    };
-  });
-
-  // Edit profile button
-  document.getElementById('btn-edit-profile').onclick = () => showToast('Edit profile coming soon');
-
-  // Share button
-  document.getElementById('btn-share-profile').onclick = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href + '?profile=' + username);
-      showToast('Profile link copied!');
-    }
-  };
-}
-
-function buildProfileClipsGrid(clips, name, initials) {
-  const grid = document.getElementById('profile-clips-grid');
-  if (!grid) return;
-
-  if (!clips || clips.length === 0) {
-    grid.innerHTML = `
-      <div class="profile-empty">
-        <i class="ti ti-microphone"></i>
-        <p>No clips yet. Contribute your first.</p>
-        <button class="btn-primary" onclick="switchView('create')">Contribute a Clip</button>
-      </div>`;
-    return;
-  }
-
-  grid.innerHTML = clips.map(clip => {
-    const catImgs = {
-      'Philosophy': 'photo-1571019613454-1cb2f99b2d8b',
-      'Business': 'photo-1454165804606-c3d57bc86b40',
-      'Literature': 'photo-1481627834876-b7833e8f5570',
-      'History': 'photo-1461360228754-6e81c478b882',
-      'Education': 'photo-1503676260728-1c00da094a0b',
-      'Stories': 'photo-1513836279014-a89f7a76ae86',
-    };
-    const imgId = catImgs[clip.category] || 'photo-1503676260728-1c00da094a0b';
-    const imgUrl = 'https://images.unsplash.com/' + imgId + '?w=400&q=80&fit=crop';
-    return `
-    <div class="profile-clip-card" onclick="playClipFromProfile('${clip.id}')">
-      <img class="profile-clip-img" src="${imgUrl}" alt="${clip.title}" loading="lazy" onerror="this.style.display='none'">
-      <div class="pcc-cat">${clip.category || 'General'}</div>
-      <div class="pcc-title">${clip.title}</div>
-      <div class="pcc-desc">${clip.description || ''}</div>
-      <div class="pcc-meta">
-        <div class="pcc-stats">
-          <span><i class="ti ti-player-play" style="font-size:12px"></i>${clip.play_count || 0}</span>
-          <span><i class="ti ti-heart" style="font-size:12px"></i>${clip.like_count || 0}</span>
-        </div>
-        <div class="pcc-duration">${formatDuration(clip.duration_seconds || 0)}</div>
-        <div class="pcc-play"><i class="ti ti-player-play"></i></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function buildAboutSection(name, username, email) {
-  const el = document.getElementById('about-section');
-  if (!el) return;
-  el.innerHTML = `
-    <div class="about-field">
-      <div class="about-label">Creator</div>
-      <div class="about-value" style="font-family:var(--font-serif);font-size:20px;font-weight:800;font-style:italic">${name}</div>
-    </div>
-    <div class="about-field">
-      <div class="about-label">Handle</div>
-      <div class="about-value">@${username}</div>
-    </div>
-    <div class="about-field">
-      <div class="about-label">Platform</div>
-      <div class="about-value">The Nile — News. Issues. Lifestyle. Entertainment.</div>
-    </div>
-    <div class="about-field">
-      <div class="about-label">Member Since</div>
-      <div class="about-value">${new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'})}</div>
-    </div>
-    <div class="about-field">
-      <div class="about-label">Contribute</div>
-      <div class="about-value">
-        <button class="btn-primary" onclick="switchView('create')" style="margin-top:4px">Record a New Clip</button>
-      </div>
-    </div>`;
-}
-
-function formatDuration(secs) {
-  const m = Math.floor(secs / 60);
-  const s = secs % 60;
-  if (m === 0) return s + ' sec';
-  if (s === 0) return m + ' min';
-  return m + ' min ' + s + ' sec';
-}
-
-function playClipFromProfile(clipId) {
-  switchView('feed');
-  setTimeout(() => {
-    const card = document.getElementById('card-' + clipId);
-    if (card) card.scrollIntoView({ behavior: 'smooth' });
-    togglePlay(clipId);
-  }, 300);
-}
-
-// Override switchView to build profile when navigating to it
-const _origSwitchView = switchView;
-switchView = function(viewName) {
-  _origSwitchView(viewName);
-  if (viewName === 'profile') buildProfile();
-};
+// ── INIT ──
+wireEvents();
+initAuth();
