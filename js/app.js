@@ -68,11 +68,55 @@ audio.addEventListener('timeupdate', () => {
   const pct = (audio.currentTime / audio.duration) * 100;
   clipProg[c.id] = pct;
   updateProg(c.id, pct, audio.currentTime);
+  // Keep lock screen scrubber in sync
+  if ('mediaSession' in navigator) {
+    try {
+      navigator.mediaSession.setPositionState({
+        duration: audio.duration,
+        playbackRate: audio.playbackRate || 1,
+        position: Math.min(audio.currentTime, audio.duration),
+      });
+    } catch(e) {}
+  }
 });
 audio.addEventListener('ended', () => { isPlaying = false; updateIcons(); setTimeout(nextClip, 800); });
 audio.addEventListener('error', () => fakeProg());
 
 const fmtT = s => { s = Math.floor(s || 0); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; };
+
+// ── MEDIA SESSION — Apple Now Playing / Lock Screen / CarPlay ──
+function updateMediaSession(clip) {
+  if (!('mediaSession' in navigator)) return;
+  const colors = getGradient(clip);
+  const artworkUrl = clip.podcastImage || '';
+  const svgArt = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><defs><radialGradient id="g" cx="30%" cy="30%"><stop offset="0%" stop-color="' + colors[0] + '"/><stop offset="50%" stop-color="' + colors[1] + '"/><stop offset="100%" stop-color="' + colors[2] + '"/></radialGradient></defs><rect width="512" height="512" fill="url(#g)"/><text x="256" y="300" text-anchor="middle" font-family="Georgia,serif" font-size="200" font-style="italic" font-weight="900" fill="rgba(255,255,255,0.85)">N</text></svg>')}`;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: clip.title,
+    artist: clip.creator,
+    album: 'The Nile · ' + clip.cat,
+    artwork: artworkUrl
+      ? [{src:artworkUrl,sizes:'512x512',type:'image/jpeg'},{src:artworkUrl,sizes:'256x256',type:'image/jpeg'}]
+      : [{src:svgArt,sizes:'512x512',type:'image/svg+xml'}]
+  });
+  navigator.mediaSession.setActionHandler('play',     () => { if (!isPlaying) togglePlay(clips[currentIdx]?.id); });
+  navigator.mediaSession.setActionHandler('pause',    () => { if (isPlaying)  togglePlay(clips[currentIdx]?.id); });
+  navigator.mediaSession.setActionHandler('nexttrack',     () => nextClip());
+  navigator.mediaSession.setActionHandler('previoustrack', () => prevClip());
+  navigator.mediaSession.setActionHandler('seekbackward',  () => rew(clips[currentIdx]?.id));
+  navigator.mediaSession.setActionHandler('seekforward', details => {
+    const skip = details?.seekOffset || 10;
+    if (audio.duration) audio.currentTime = Math.min(audio.duration, audio.currentTime + skip);
+  });
+  try {
+    navigator.mediaSession.setPositionState({
+      duration: audio.duration || clip.duration || 75,
+      playbackRate: speed,
+      position: Math.min(audio.currentTime || 0, audio.duration || clip.duration || 75),
+    });
+  } catch(e) {}
+}
+
+
 
 function updateProg(id, pct, elapsed) {
   const f = document.getElementById('pf-' + id);
@@ -192,13 +236,13 @@ function buildFeed() {
     const colors = getGradient(clip);
     const bg = gradCSS(colors);
     const hasPodcastImg = !!clip.podcastImage;
-    const cardBg = hasPodcastImg ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center` : `background:${bg}`;
+
 
     const card = document.createElement('div');
     card.className = 'clip-card';
     card.id = 'card-' + clip.id;
     card.innerHTML = `
-      <div class="clip-card-bg" style="${cardBg}"></div>
+
       <div class="clip-inner" style="${hasPodcastImg ? '' : `background:${bg}`}">
         ${hasPodcastImg ? `<div class="clip-inner-bg" style="background-image:url(${clip.podcastImage});background-size:cover;background-position:center"></div>` : `<div class="clip-inner-bg" style="background:${bg}"></div>`}
         <div class="clip-inner-overlay"></div>
@@ -298,6 +342,8 @@ function togglePlay(id) {
 
 function startAudio() {
   const c = clips[currentIdx]; if (!c) return;
+  updateMediaSession(c);
+  if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
   if (c.audioUrl) {
     if (audio.src !== c.audioUrl) { audio.src = c.audioUrl; clipProg[c.id] = 0; }
     audio.playbackRate = speed;
@@ -305,7 +351,7 @@ function startAudio() {
   } else fakeProg();
 }
 
-function stopAudio() { audio.pause(); if (progInterval) { clearInterval(progInterval); progInterval = null; } }
+function stopAudio() { audio.pause(); if (progInterval) { clearInterval(progInterval); progInterval = null; } if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; }
 
 function fakeProg() {
   if (progInterval) clearInterval(progInterval);
