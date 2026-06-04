@@ -239,20 +239,12 @@
 <!-- ═══════════════════ APP ═══════════════════ -->
 <div id="page-app" style="display:none">
 
-  <!-- APP HEADER — NEWSPAPER STYLE -->
-  <header class="app-header">
-    <div class="app-header-left">
-      <span class="app-date" id="app-date"></span>
-    </div>
-    <div class="app-masthead">The Nile</div>
-    <div class="app-header-right">
-      <button class="icon-btn" id="btn-search-header" title="Search"><i class="ti ti-search"></i></button>
-      <button class="icon-btn" id="btn-signout" title="Sign out"><i class="ti ti-logout"></i></button>
-    </div>
-  </header>
-  <div class="app-header-rule"></div>
+  <!-- Sign out button hidden in sidebar -->
+  <div id="app-header-hidden" style="display:none">
+    <button class="icon-btn" id="btn-signout"><i class="ti ti-logout"></i></button>
+  </div>
 
-  <div class="app-body">
+  <div class="app-body" style="height:100vh;overflow:hidden">
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
@@ -289,29 +281,29 @@
 
       <!-- FEED VIEW -->
       <div id="view-feed" class="view active">
+        <!-- Tab bar -->
         <div class="feed-header">
-          <div class="feed-header-left">
-            <div class="feed-edition-label">Today's Edition</div>
-          </div>
           <div class="feed-tabs-bar">
-            <span class="feed-tab" data-feed="following">Following</span>
-            <span class="feed-tab active" data-feed="foryou">For You</span>
+            <button class="feed-tab" data-feed="following">Following</button>
+            <button class="feed-tab active" data-feed="foryou">For You</button>
           </div>
-          <div class="feed-header-right">
-            <span class="rss-live" id="rss-live" style="display:none"><i class="ti ti-rss"></i> Live</span>
-          </div>
+          <span class="rss-live" id="rss-live" style="display:none"><i class="ti ti-rss"></i> Live</span>
         </div>
-        <div class="feed-rule"></div>
-        <div class="feed-nav-arrows">
-          <button class="feed-arrow" id="btn-prev" title="Previous"><i class="ti ti-chevron-up"></i></button>
-          <button class="feed-arrow" id="btn-next" title="Next"><i class="ti ti-chevron-down"></i></button>
-        </div>
+        <!-- Loading -->
         <div class="feed-loading" id="feed-loading">
           <div class="spinner"></div>
           <div class="feed-loading-text">Preparing today's edition...</div>
           <div class="feed-loading-sub">Loading from The Nile library</div>
         </div>
-        <div class="feed-scroll" id="feed-scroll"></div>
+        <!-- Scroll area -->
+        <div class="feed-scroll-wrap">
+          <div class="feed-scroll" id="feed-scroll"></div>
+          <!-- Up/Down arrows -->
+          <div class="feed-nav-arrows">
+            <button class="feed-arrow" id="btn-prev"><i class="ti ti-chevron-up"></i></button>
+            <button class="feed-arrow" id="btn-next"><i class="ti ti-chevron-down"></i></button>
+          </div>
+        </div>
       </div>
 
       <!-- DISCOVER VIEW -->

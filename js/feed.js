@@ -141,7 +141,7 @@ function animateWaveform(id, pct) {
   const bars = document.querySelectorAll(`#wv-${id} .wv-bar`);
   bars.forEach((b, i) => {
     const barPct = (i / bars.length) * 100;
-    b.style.background = barPct < pct ? '#B8922A' : 'rgba(255,255,255,0.2)';
+    b.style.background = barPct < pct ? '#B8922A' : 'rgba(255,255,255,0.25)';
     if (isPlaying && barPct >= pct && barPct < pct + 5) {
       b.style.height = (5 + Math.random() * 38) + 'px';
     }
@@ -156,7 +156,7 @@ function buildWaveform(containerId, pct = 0) {
     const b = document.createElement('div');
     b.className = 'wv-bar';
     b.style.height = (5 + Math.random() * 38) + 'px';
-    b.style.background = (i / 50 * 100) < pct ? '#B8922A' : 'rgba(255,255,255,0.2)';
+    b.style.background = (i / 50 * 100) < pct ? '#B8922A' : 'rgba(255,255,255,0.25)';
     el.appendChild(b);
   }
 }
@@ -381,33 +381,31 @@ function buildFeed() {
     const card = document.createElement('div');
     card.className = 'clip-card';
     card.id = 'card-' + clip.id;
+    card.style.height = '100%';
 
     const clipImg = getClipImage(clip);
     card.innerHTML = `
-      <div class="clip-card-bg" style="background-image:url(${clipImg})"></div>
-      <div class="clip-left-panel">
-        <div class="clp-edition">${clip.cat}</div>
-        <div class="clp-related">Tags</div>
-        ${clip.tags.split(' ').slice(0,4).map(t => '<div class="clp-tag">' + t + '</div>').join('')}
-        <div class="clp-progress">${i+1} of ${clips.length}</div>
-      </div>
+      <!-- Portrait card -->
       <div class="clip-center">
         <div class="clip-center-img" style="background-image:url(${clipImg})"></div>
         <div class="clip-center-overlay"></div>
+
+        <!-- NYT top bar -->
         <div class="clip-nyt-header">
           <span class="clip-nyt-edition">The Nile · ${clip.cat}</span>
           <span class="clip-nyt-num">${String(i+1).padStart(2,'0')} / ${String(clips.length).padStart(2,'0')}</span>
         </div>
+
+        <!-- Bottom content -->
         <div class="clip-center-content">
-          <div class="clip-section-tag">${clip.cat}</div>
-          <div class="clip-headline">${clip.title}</div>
-          <div class="clip-byline">
-            <div class="clip-byline-avatar" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')"></div>
-            <span>${clip.creator}</span>
-            <span class="byline-dot"></span>
-            <span>${fmtTime(clip.duration)}</span>
+          <div class="clip-creator-strip">
+            <div class="clip-creator-photo" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')"></div>
+            <span class="clip-creator-name" onclick="openPodcastProfile('${clip.id}')">${clip.creator}</span>
+            <button class="follow-pill ${followedCreators[clip.id] ? 'following' : ''}" id="fp-${clip.id}" onclick="toggleFollow('${clip.id}')">${followedCreators[clip.id] ? 'Following' : 'Follow'}</button>
           </div>
-          <div class="clip-standfirst">${clip.desc || 'From the great works of human thought and literature.'}</div>
+          <div class="clip-headline">${clip.title}</div>
+          <div class="clip-standfirst">${clip.desc || ''}</div>
+          <div class="clip-article-tags">${clip.tags}</div>
           <div class="clip-inline-player">
             <div class="waveform" id="wv-${clip.id}" onclick="seekWaveform(event,'${clip.id}')"></div>
             <div class="progress-row">
@@ -426,28 +424,30 @@ function buildFeed() {
               <button class="ctrl-btn" onclick="nextClip()"><i class="ti ti-skip-forward"></i></button>
               <button class="speed-tag" onclick="cycleSpeed()">${currentSpeed}x</button>
             </div>
-            <div class="clip-creator-strip">
-              <div class="clip-creator-photo" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')"></div>
-              <span class="clip-creator-name" onclick="openPodcastProfile('${clip.id}')">${clip.creator}</span>
-              <button class="follow-pill ${followedCreators[clip.id] ? 'following' : ''}" id="fp-${clip.id}" onclick="toggleFollow('${clip.id}')">${followedCreators[clip.id] ? 'Subscribed' : 'Subscribe'}</button>
-            </div>
           </div>
         </div>
       </div>
+
+      <!-- Right action buttons — TikTok style -->
       <div class="clip-actions">
+        <div class="clip-action-avatar" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')">
+          <div class="clip-action-avatar-plus">+</div>
+        </div>
         <div class="action-btn ${likedClips[clip.id] ? 'liked' : ''}" onclick="toggleLike('${clip.id}',this)">
-          <div class="action-circle"><i class="ti ti-heart"></i></div>
+          <div class="action-circle"><i class="ti ti-heart${likedClips[clip.id] ? '-filled' : ''}"></i></div>
           <span class="action-count" id="lc-${clip.id}">${clip.likes}</span>
         </div>
         <div class="action-btn" onclick="openComments('${clip.id}')">
           <div class="action-circle"><i class="ti ti-message-circle"></i></div>
           <span class="action-count">${(allComments[clip.id] || []).length || 0}</span>
         </div>
-        <div class="action-btn" onclick="shareClip('${clip.id}')">
-          <div class="action-circle"><i class="ti ti-share-2"></i></div>
-        </div>
         <div class="action-btn ${savedClips[clip.id] ? 'saved' : ''}" onclick="toggleSave('${clip.id}',this)">
           <div class="action-circle"><i class="ti ti-bookmark"></i></div>
+          <span class="action-count">0</span>
+        </div>
+        <div class="action-btn" onclick="shareClip('${clip.id}')">
+          <div class="action-circle"><i class="ti ti-share-2"></i></div>
+          <span class="action-count">${clip.plays}</span>
         </div>
       </div>`
 
