@@ -384,40 +384,53 @@ function buildFeed() {
 
     const clipImg = getClipImage(clip);
     card.innerHTML = `
-      <div class="clip-card-bg" style="background-image:url(${clipImg});background-color:#1a1208;background-size:cover;background-position:center"></div>
-      <div class="clip-card-content">
-        <div class="clip-section-tag">${clip.cat}</div>
-        <div class="clip-headline">${clip.title}</div>
-        <div class="clip-byline">
-          <div class="clip-byline-avatar" style="background-image:url(${clip.podcastImage || clipImg})"></div>
-          <span>${clip.creator}</span>
-          <span class="byline-dot"></span>
-          <span>${fmtTime(clip.duration)}</span>
+      <div class="clip-card-bg" style="background-image:url(${clipImg})"></div>
+      <div class="clip-left-panel">
+        <div class="clp-edition">${clip.cat}</div>
+        <div class="clp-related">Tags</div>
+        ${clip.tags.split(' ').slice(0,4).map(t => '<div class="clp-tag">' + t + '</div>').join('')}
+        <div class="clp-progress">${i+1} of ${clips.length}</div>
+      </div>
+      <div class="clip-center">
+        <div class="clip-center-img" style="background-image:url(${clipImg})"></div>
+        <div class="clip-center-overlay"></div>
+        <div class="clip-nyt-header">
+          <span class="clip-nyt-edition">The Nile · ${clip.cat}</span>
+          <span class="clip-nyt-num">${String(i+1).padStart(2,'0')} / ${String(clips.length).padStart(2,'0')}</span>
         </div>
-        <div class="clip-standfirst">${clip.desc || 'From the great works of human thought and literature.'}</div>
-        <div class="clip-article-tags">${clip.tags}</div>
-        <div class="clip-inline-player">
-          <div class="waveform" id="wv-${clip.id}" onclick="seekWaveform(event,'${clip.id}')"></div>
-          <div class="progress-row">
-            <span class="time-label" id="et-${clip.id}">${fmtTime(elapsed)}</span>
-            <div class="progress-track" onclick="seekTrack(event,'${clip.id}')">
-              <div class="progress-fill" id="pf-${clip.id}" style="width:${pct}%"></div>
+        <div class="clip-center-content">
+          <div class="clip-section-tag">${clip.cat}</div>
+          <div class="clip-headline">${clip.title}</div>
+          <div class="clip-byline">
+            <div class="clip-byline-avatar" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')"></div>
+            <span>${clip.creator}</span>
+            <span class="byline-dot"></span>
+            <span>${fmtTime(clip.duration)}</span>
+          </div>
+          <div class="clip-standfirst">${clip.desc || 'From the great works of human thought and literature.'}</div>
+          <div class="clip-inline-player">
+            <div class="waveform" id="wv-${clip.id}" onclick="seekWaveform(event,'${clip.id}')"></div>
+            <div class="progress-row">
+              <span class="time-label" id="et-${clip.id}">${fmtTime(elapsed)}</span>
+              <div class="progress-track" onclick="seekTrack(event,'${clip.id}')">
+                <div class="progress-fill" id="pf-${clip.id}" style="width:${pct}%"></div>
+              </div>
+              <span class="time-label">${fmtTime(clip.duration)}</span>
             </div>
-            <span class="time-label">${fmtTime(clip.duration)}</span>
-          </div>
-          <div class="player-controls">
-            <button class="ctrl-btn" onclick="rewind10('${clip.id}')"><i class="ti ti-rewind-10"></i></button>
-            <button class="ctrl-btn" onclick="prevClip()"><i class="ti ti-skip-back"></i></button>
-            <button class="play-btn" onclick="togglePlay('${clip.id}')">
-              <i class="ti ${i === currentIdx && isPlaying ? 'ti-player-pause' : 'ti-player-play'}" id="pi-${clip.id}"></i>
-            </button>
-            <button class="ctrl-btn" onclick="nextClip()"><i class="ti ti-skip-forward"></i></button>
-            <button class="speed-tag" onclick="cycleSpeed()">${currentSpeed}x</button>
-          </div>
-          <div class="clip-creator-strip">
-            <div class="clip-creator-photo" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')"></div>
-            <span class="clip-creator-name" onclick="openPodcastProfile('${clip.id}')">${clip.creator}</span>
-            <button class="follow-pill ${followedCreators[clip.id] ? 'following' : ''}" id="fp-${clip.id}" onclick="toggleFollow('${clip.id}')">${followedCreators[clip.id] ? 'Subscribed' : 'Subscribe'}</button>
+            <div class="player-controls">
+              <button class="ctrl-btn" onclick="rewind10('${clip.id}')"><i class="ti ti-rewind-10"></i></button>
+              <button class="ctrl-btn" onclick="prevClip()"><i class="ti ti-skip-back"></i></button>
+              <button class="play-btn" onclick="togglePlay('${clip.id}')">
+                <i class="ti ${i === currentIdx && isPlaying ? 'ti-player-pause' : 'ti-player-play'}" id="pi-${clip.id}"></i>
+              </button>
+              <button class="ctrl-btn" onclick="nextClip()"><i class="ti ti-skip-forward"></i></button>
+              <button class="speed-tag" onclick="cycleSpeed()">${currentSpeed}x</button>
+            </div>
+            <div class="clip-creator-strip">
+              <div class="clip-creator-photo" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')"></div>
+              <span class="clip-creator-name" onclick="openPodcastProfile('${clip.id}')">${clip.creator}</span>
+              <button class="follow-pill ${followedCreators[clip.id] ? 'following' : ''}" id="fp-${clip.id}" onclick="toggleFollow('${clip.id}')">${followedCreators[clip.id] ? 'Subscribed' : 'Subscribe'}</button>
+            </div>
           </div>
         </div>
       </div>

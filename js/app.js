@@ -49,66 +49,115 @@ function initApp() {
 }
 
 function wireAppEvents() {
-  // Sidebar nav
+  // ── Sidebar nav items ──
   document.querySelectorAll('.nav-item').forEach(item => {
-    item.onclick = () => switchView(item.dataset.view);
+    item.addEventListener('click', () => switchView(item.dataset.view));
   });
 
-  // Mobile nav
+  // ── Mobile nav items ──
   document.querySelectorAll('.mob-item').forEach(item => {
-    item.onclick = () => switchView(item.dataset.view);
+    item.addEventListener('click', () => {
+      if (item.dataset.view) switchView(item.dataset.view);
+    });
   });
 
-  // Feed tabs
+  // ── Feed tabs ──
   document.querySelectorAll('.feed-tab').forEach(tab => {
-    tab.onclick = () => {
+    tab.addEventListener('click', () => {
       document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       if (tab.dataset.feed === 'following') showToast('Showing clips from people you follow');
-    };
+    });
   });
 
-  // Feed arrows
-  document.getElementById('btn-prev').onclick = prevClip;
-  document.getElementById('btn-next').onclick = nextClip;
+  // ── Feed arrows ──
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+  if (btnPrev) btnPrev.addEventListener('click', prevClip);
+  if (btnNext) btnNext.addEventListener('click', nextClip);
 
-  // Player bar
-  document.getElementById('pb-play').onclick = () => togglePlay(clips[currentIdx]?.id);
-  document.getElementById('pb-next').onclick = nextClip;
-  document.getElementById('pb-rewind').onclick = () => rewind10(clips[currentIdx]?.id);
-  document.getElementById('player-progress').onclick = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const pct = ((e.clientX - rect.left) / rect.width) * 100;
-    const clip = clips[currentIdx];
-    if (clip) {
-      clipProgress[clip.id] = pct;
-      if (audioEl.duration) audioEl.currentTime = (pct / 100) * audioEl.duration;
-      document.getElementById('player-fill').style.width = pct + '%';
-    }
-  };
+  // ── Player bar ──
+  const pbPlay = document.getElementById('pb-play');
+  const pbNext = document.getElementById('pb-next');
+  const pbRewind = document.getElementById('pb-rewind');
+  const playerProgress = document.getElementById('player-progress');
+  if (pbPlay) pbPlay.addEventListener('click', () => togglePlay(clips[currentIdx]?.id));
+  if (pbNext) pbNext.addEventListener('click', nextClip);
+  if (pbRewind) pbRewind.addEventListener('click', () => rewind10(clips[currentIdx]?.id));
+  if (playerProgress) {
+    playerProgress.addEventListener('click', (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pct = ((e.clientX - rect.left) / rect.width) * 100;
+      const clip = clips[currentIdx];
+      if (clip) {
+        clipProgress[clip.id] = pct;
+        if (audioEl.duration) audioEl.currentTime = (pct / 100) * audioEl.duration;
+        const fill = document.getElementById('player-fill');
+        if (fill) fill.style.width = pct + '%';
+      }
+    });
+  }
 
-  // Comments
-  document.getElementById('modal-comments').onclick = (e) => {
-    if (e.target === document.getElementById('modal-comments')) {
-      document.getElementById('modal-comments').style.display = 'none';
-    }
-  };
-  document.getElementById('btn-send-comment').onclick = sendComment;
-  document.getElementById('comment-input').onkeydown = (e) => {
-    if (e.key === 'Enter') sendComment();
-  };
+  // ── Comments modal ──
+  const commentsModal = document.getElementById('modal-comments');
+  if (commentsModal) {
+    commentsModal.addEventListener('click', (e) => {
+      if (e.target === commentsModal) commentsModal.style.display = 'none';
+    });
+  }
+  const sendCommentBtn = document.getElementById('btn-send-comment');
+  const commentInput = document.getElementById('comment-input');
+  if (sendCommentBtn) sendCommentBtn.addEventListener('click', sendComment);
+  if (commentInput) commentInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendComment(); });
 
-  // Create page
-  document.getElementById('upload-btn').onclick = () => document.getElementById('file-upload').click();
-  document.getElementById('file-upload').onchange = (e) => {
+  // ── Create page ──
+  const uploadBtn = document.getElementById('upload-btn');
+  const fileUpload = document.getElementById('file-upload');
+  const publishBtn = document.getElementById('btn-publish');
+  const recBtn = document.getElementById('rec-btn');
+  const createFirst = document.getElementById('btn-create-first');
+  if (uploadBtn) uploadBtn.addEventListener('click', () => fileUpload?.click());
+  if (fileUpload) fileUpload.addEventListener('change', (e) => {
     const f = e.target.files[0];
     if (f) showToast('File loaded: ' + f.name);
-  };
-  document.getElementById('btn-publish').onclick = publishClip;
-  document.getElementById('rec-btn').onclick = toggleRecord;
-  document.getElementById('btn-create-first').onclick = () => switchView('create');
+  });
+  if (publishBtn) publishBtn.addEventListener('click', publishClip);
+  if (recBtn) recBtn.addEventListener('click', toggleRecord);
+  if (createFirst) createFirst.addEventListener('click', () => switchView('create'));
 
-  // Keyboard shortcuts
+  // ── Live page ──
+  const goLive = document.getElementById('btn-go-live');
+  if (goLive) goLive.addEventListener('click', () => showToast('Live broadcasting coming soon!'));
+
+  // ── Profile ──
+  const editProfile = document.getElementById('btn-edit-profile');
+  const shareProfile = document.getElementById('btn-share-profile');
+  if (editProfile) editProfile.addEventListener('click', () => showToast('Edit profile coming soon'));
+  if (shareProfile) shareProfile.addEventListener('click', () => {
+    if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+    showToast('Profile link copied!');
+  });
+
+  // ── Sidebar edition items ──
+  document.querySelectorAll('.edition-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const text = item.textContent.trim();
+      const cat = text.replace(/^[NILE§·\s]+/, '').trim();
+      const filtered = clips.filter(c => c.cat === cat);
+      if (filtered.length > 0) {
+        clips = [...filtered];
+        currentIdx = 0;
+        buildFeed();
+        switchView('feed');
+        showToast('Showing ' + cat);
+      } else {
+        switchView('feed');
+        showToast('Loading ' + cat + '...');
+      }
+    });
+  });
+
+  // ── Keyboard shortcuts ──
   document.addEventListener('keydown', (e) => {
     if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
     if (document.getElementById('page-app').style.display === 'none') return;
