@@ -384,7 +384,7 @@ function buildFeed() {
 
     const clipImg = getClipImage(clip);
     card.innerHTML = `
-      <div class="clip-card-bg" style="background:${clip.bg}"></div>
+      <div class="clip-card-bg" style="background:${clip.bg};background-image:url(${clipImg});background-size:cover;background-position:center"></div>
       <div class="clip-card-content">
         <!-- LEFT: ARTICLE WITH IMAGE -->
         <div class="clip-article">
