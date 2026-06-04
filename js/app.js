@@ -314,6 +314,15 @@ function buildFeed() {
   }, {threshold: 0.75});
   container.querySelectorAll('.clip-card').forEach(el => obs.observe(el));
   updateBar();
+
+  // Auto-start first clip
+  if (clips.length > 0) {
+    currentIdx = 0;
+    isPlaying = true;
+    updateIcons();
+    startAudio();
+    updateBar();
+  }
 }
 
 function updateIcons() {
@@ -347,7 +356,23 @@ function startAudio() {
   if (c.audioUrl) {
     if (audio.src !== c.audioUrl) { audio.src = c.audioUrl; clipProg[c.id] = 0; }
     audio.playbackRate = speed;
-    audio.play().catch(() => fakeProg());
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        // Autoplay blocked by browser — fall back to fake progress
+        // but show a "tap to play" hint
+        console.log('Autoplay blocked:', err);
+        fakeProg();
+        // Add a one-time click listener to resume on first interaction
+        const resume = () => {
+          audio.play().catch(() => {});
+          document.removeEventListener('click', resume);
+          document.removeEventListener('touchstart', resume);
+        };
+        document.addEventListener('click', resume, {once: true});
+        document.addEventListener('touchstart', resume, {once: true});
+      });
+    }
   } else fakeProg();
 }
 
