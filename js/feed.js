@@ -1,88 +1,71 @@
 // ═══════════════════════════════════════
-// THE NILE — FEED & AUDIO
+// THE NILE — FEED (CLEAN REBUILD)
+// No images — rich gradients per clip
 // ═══════════════════════════════════════
 
-// ═══════════════════════════════════════
-// IMAGE MAPS — Unsplash photos for authors & categories
-// ═══════════════════════════════════════
-const UNSPLASH = 'https://images.unsplash.com/';
-
-const AUTHOR_IMAGES = {
-  'marcus aurelius':  UNSPLASH + 'photo-1578301978693-85fa9c0320b9?w=800&q=80&fit=crop',
-  'dale carnegie':    UNSPLASH + 'photo-1507003211169-0a1dd7228f2d?w=800&q=80&fit=crop',
-  'sun tzu':          UNSPLASH + 'photo-1544716278-ca5e3f4abd8c?w=800&q=80&fit=crop',
-  'james allen':      UNSPLASH + 'photo-1518495973542-4542c06a5843?w=800&q=80&fit=crop',
-  'napoleon hill':    UNSPLASH + 'photo-1460925895917-afdab827c52f?w=800&q=80&fit=crop',
-  'seneca':           UNSPLASH + 'photo-1571019613454-1cb2f99b2d8b?w=800&q=80&fit=crop',
-  'epictetus':        UNSPLASH + 'photo-1580130775562-0ef92da028de?w=800&q=80&fit=crop',
-  'aristotle':        UNSPLASH + 'photo-1541963463532-d68292c34b19?w=800&q=80&fit=crop',
-  'plato':            UNSPLASH + 'photo-1507003211169-0a1dd7228f2d?w=800&q=80&fit=crop',
-  'benjamin franklin':UNSPLASH + 'photo-1589829545856-d10d557cf95f?w=800&q=80&fit=crop',
-  'thoreau':          UNSPLASH + 'photo-1448375240586-882707db888b?w=800&q=80&fit=crop',
-  'frederick douglass':UNSPLASH + 'photo-1531545514256-b1400bc00f31?w=800&q=80&fit=crop',
-  'booker':           UNSPLASH + 'photo-1559827260-dc66d52bef19?w=800&q=80&fit=crop',
-  'machiavelli':      UNSPLASH + 'photo-1564507592333-c60657eea523?w=800&q=80&fit=crop',
-  'oscar wilde':      UNSPLASH + 'photo-1513836279014-a89f7a76ae86?w=800&q=80&fit=crop',
-  'dickens':          UNSPLASH + 'photo-1481627834876-b7833e8f5570?w=800&q=80&fit=crop',
-  'mark twain':       UNSPLASH + 'photo-1507003211169-0a1dd7228f2d?w=800&q=80&fit=crop',
-  'emerson':          UNSPLASH + 'photo-1448375240586-882707db888b?w=800&q=80&fit=crop',
-  'william james':    UNSPLASH + 'photo-1507003211169-0a1dd7228f2d?w=800&q=80&fit=crop',
-  'gibran':           UNSPLASH + 'photo-1504701954957-2010ec3bcec1?w=800&q=80&fit=crop',
-  'tolstoy':          UNSPLASH + 'photo-1547981609-4b6bfe67ca0b?w=800&q=80&fit=crop',
-  'victor hugo':      UNSPLASH + 'photo-1502602898657-3e91760cbb34?w=800&q=80&fit=crop',
-  'shakespeare':      UNSPLASH + 'photo-1513836279014-a89f7a76ae86?w=800&q=80&fit=crop',
-  'voltaire':         UNSPLASH + 'photo-1502602898657-3e91760cbb34?w=800&q=80&fit=crop',
-  'confucius':        UNSPLASH + 'photo-1544716278-ca5e3f4abd8c?w=800&q=80&fit=crop',
+// Each author/category gets a unique rich gradient
+const GRADIENTS = {
+  // Authors
+  'marcus aurelius':   ['#1a0a2e','#2d1b69','#11998e'],
+  'dale carnegie':     ['#0f2027','#203a43','#2c5364'],
+  'sun tzu':           ['#16222a','#3a6073','#1a1a2e'],
+  'james allen':       ['#134e5e','#71b280','#0a2e1a'],
+  'napoleon hill':     ['#1a1a2e','#16213e','#0f3460'],
+  'seneca':            ['#2c1810','#6b3a2a','#1a0a05'],
+  'epictetus':         ['#0d1b2a','#1b2a4a','#2d4a6b'],
+  'aristotle':         ['#0d0d1a','#1a1a3e','#2a2a5e'],
+  'plato':             ['#1a0d2e','#2e1a5e','#0d0a1a'],
+  'benjamin franklin': ['#0a1628','#1c3a5c','#2a4a7a'],
+  'thoreau':           ['#0a1a0a','#1a3a1a','#0d2a0d'],
+  'frederick douglass':['#1a0a0a','#3a1a1a','#1a0505'],
+  'machiavelli':       ['#1a1205','#3a2a0d','#1a0d02'],
+  'oscar wilde':       ['#1a0a1a','#3a1a3a','#5e2a5e'],
+  'dickens':           ['#0a0a1a','#1a1a3a','#2a2050'],
+  'mark twain':        ['#0d1a0d','#1a3328','#0a2018'],
+  'emerson':           ['#1a1205','#2a2010','#3a3020'],
+  'william james':     ['#0d1520','#1a2a3a','#0a1828'],
+  'gibran':            ['#1a0d1a','#3a1a3a','#1a0a20'],
+  'tolstoy':           ['#0a0d1a','#1a2030','#0a1520'],
+  'victor hugo':       ['#0d0a1a','#1a1530','#2a2050'],
+  'shakespeare':       ['#1a0505','#3a0d0d','#1a0202'],
+  'voltaire':          ['#0d1a10','#1a3a20','#0a2015'],
+  'confucius':         ['#1a0d05','#3a2010','#1a1005'],
+  // Categories
+  'News':          ['#0d1520','#1a2d4a','#0a1830'],
+  'Issues':        ['#0d1a0d','#1a3a1a','#102810'],
+  'Lifestyle':     ['#1a0d1a','#2a1a3a','#1a0d28'],
+  'Entertainment': ['#1a0808','#3a1010','#200505'],
+  'Philosophy':    ['#0d0d28','#1a1a4a','#080818'],
+  'History':       ['#1a1205','#2a2010','#100c02'],
+  'Education':     ['#051528','#0a2a4a','#051020'],
+  'Stories':       ['#1a0a15','#3a1a2a','#1a0810'],
 };
 
-const CAT_IMAGES = {
-  'Philosophy':     UNSPLASH + 'photo-1571019613454-1cb2f99b2d8b?w=800&q=80&fit=crop',
-  'Business':       UNSPLASH + 'photo-1454165804606-c3d57bc86b40?w=800&q=80&fit=crop',
-  'Literature':     UNSPLASH + 'photo-1481627834876-b7833e8f5570?w=800&q=80&fit=crop',
-  'History':        UNSPLASH + 'photo-1461360228754-6e81c478b882?w=800&q=80&fit=crop',
-  'Education':      UNSPLASH + 'photo-1503676260728-1c00da094a0b?w=800&q=80&fit=crop',
-  'News':           UNSPLASH + 'photo-1504711434969-e33886168f5c?w=800&q=80&fit=crop',
-  'Issues':         UNSPLASH + 'photo-1529107386315-e1a2ed48a620?w=800&q=80&fit=crop',
-  'Lifestyle':      UNSPLASH + 'photo-1506905925346-21bda4d32df4?w=800&q=80&fit=crop',
-  'Entertainment':  UNSPLASH + 'photo-1514525253161-7a46d19cd819?w=800&q=80&fit=crop',
-  'Stories':        UNSPLASH + 'photo-1513836279014-a89f7a76ae86?w=800&q=80&fit=crop',
-  'Self-Mastery':   UNSPLASH + 'photo-1518495973542-4542c06a5843?w=800&q=80&fit=crop',
-  'Sports':         UNSPLASH + 'photo-1461896836934-ffe607ba8211?w=800&q=80&fit=crop',
-  'Music':          UNSPLASH + 'photo-1511379938547-c1f69419868d?w=800&q=80&fit=crop',
-  'Science':        UNSPLASH + 'photo-1507413245164-6160d8298b31?w=800&q=80&fit=crop',
-  'Technology':     UNSPLASH + 'photo-1518770660439-4636190af475?w=800&q=80&fit=crop',
-  'Poetry & Spirit':UNSPLASH + 'photo-1504701954957-2010ec3bcec1?w=800&q=80&fit=crop',
-};
+function getGradient(clip) {
+  // Check if Listen Notes clip has an image — use that if so
+  if (clip.podcastImage) return null;
 
-function getClipImage(clip) {
-  // Use Listen Notes/Supabase image if available
-  if (clip.imageUrl) return clip.imageUrl;
-  // Otherwise match by author name
-  const creator = (clip.creator || '').toLowerCase();
-  const source = (clip.rss_source || '').toLowerCase();
-  const combined = creator + ' ' + source;
-  for (const [key, url] of Object.entries(AUTHOR_IMAGES)) {
-    if (combined.includes(key)) return url;
+  const key = (clip.creator || '').toLowerCase();
+  const cat = clip.cat || 'News';
+
+  for (const [author, colors] of Object.entries(GRADIENTS)) {
+    if (key.includes(author)) return colors;
   }
-  return CAT_IMAGES[clip.cat] || CAT_IMAGES['Philosophy'];
+  return GRADIENTS[cat] || GRADIENTS['News'];
 }
 
+function buildGradientBg(colors) {
+  const [c1, c2, c3] = colors;
+  return `radial-gradient(ellipse at top left, ${c1} 0%, ${c2} 50%, ${c3} 100%)`;
+}
 
-// Dark moody gradients for clip cards
-const CAT_GRADIENTS = {
-  'Education':  'linear-gradient(160deg,#0d0a05 0%,#1a1206 50%,#080804 100%)',
-  'Business':   'linear-gradient(160deg,#080810 0%,#0d0d1a 50%,#050508 100%)',
-  'Technology': 'linear-gradient(160deg,#050d0d 0%,#0a1a1a 50%,#040a0a 100%)',
-  'Stories':    'linear-gradient(160deg,#0d0805 0%,#1a1008 50%,#0a0804 100%)',
-  'News':       'linear-gradient(160deg,#0a0808 0%,#1a1010 50%,#080606 100%)',
-  'Sports':     'linear-gradient(160deg,#060d06 0%,#0d1a0d 50%,#040a04 100%)',
-  'Comedy':     'linear-gradient(160deg,#0d0d06 0%,#1a1a08 50%,#0a0a04 100%)',
-  'Wellness':   'linear-gradient(160deg,#050d0a 0%,#0a1a14 50%,#040a08 100%)',
-  'Music':      'linear-gradient(160deg,#0d050d 0%,#1a0a1a 50%,#0a040a 100%)',
-};
+function buildInitials(name) {
+  return (name || 'N').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+}
 
+// ── FALLBACK CLIPS ──
 const FALLBACK_CLIPS = [
-  { id: 'fallback_1', title: 'Loading your content...', creator: 'Sonair', handle: '@sonair', verified: true, desc: 'Your clips are loading from the library', tags: '#sonair', cat: 'Education', duration: 60, bg: CAT_GRADIENTS['Education'], initials: 'S', color: 'linear-gradient(135deg,#C8A96E,#8B5E3C)', plays: '0', likes: '0', audioUrl: '' },
+  { id:'f1', title:'Loading your feed...', creator:'The Nile', handle:'@thenile', verified:true, desc:'Your clips are loading.', tags:'#nile', cat:'News', duration:60, plays:'0', likes:'0', audioUrl:'' }
 ];
 
 let clips = [];
@@ -95,11 +78,6 @@ let savedClips = {};
 let followedCreators = {};
 let currentCommentClip = null;
 let allComments = {};
-let isRecording = false;
-let recSeconds = 0;
-let recTimerInterval = null;
-let recAnimInterval = null;
-let mediaRecorder = null;
 let currentSpeed = 1;
 const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -117,21 +95,21 @@ audioEl.addEventListener('timeupdate', () => {
 audioEl.addEventListener('ended', () => {
   isPlaying = false;
   updatePlayIcons();
-  nextClip();
+  setTimeout(() => nextClip(), 800);
 });
 
-audioEl.addEventListener('error', () => {
-  startFakeProgress();
-});
+audioEl.addEventListener('error', () => startFakeProgress());
+
+function fmtTime(secs) {
+  const s = Math.floor(secs || 0);
+  return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
 
 function updateProgressUI(id, pct, elapsed) {
-  const fill = document.getElementById('pf-' + id);
+  const fill = document.getElementById('pf-'+id);
   if (fill) fill.style.width = pct + '%';
-  const et = document.getElementById('et-' + id);
-  if (et && elapsed !== undefined) {
-    const s = Math.floor(elapsed);
-    et.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
-  }
+  const et = document.getElementById('et-'+id);
+  if (et && elapsed !== undefined) et.textContent = fmtTime(elapsed);
   const pbFill = document.getElementById('player-fill');
   if (pbFill) pbFill.style.width = pct + '%';
   animateWaveform(id, pct);
@@ -139,338 +117,254 @@ function updateProgressUI(id, pct, elapsed) {
 
 function animateWaveform(id, pct) {
   const bars = document.querySelectorAll(`#wv-${id} .wv-bar`);
-  bars.forEach((b, i) => {
-    const barPct = (i / bars.length) * 100;
-    b.style.background = barPct < pct ? '#B8922A' : 'rgba(255,255,255,0.25)';
-    if (isPlaying && barPct >= pct && barPct < pct + 5) {
-      b.style.height = (5 + Math.random() * 38) + 'px';
-    }
+  bars.forEach((b,i) => {
+    const bp = (i/bars.length)*100;
+    b.style.background = bp < pct ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)';
+    if (isPlaying && bp >= pct && bp < pct+5) b.style.height = (6+Math.random()*32)+'px';
   });
 }
 
-function buildWaveform(containerId, pct = 0) {
+function buildWaveform(containerId, pct=0) {
   const el = document.getElementById(containerId);
   if (!el) return;
   el.innerHTML = '';
-  for (let i = 0; i < 50; i++) {
+  for (let i=0; i<44; i++) {
     const b = document.createElement('div');
     b.className = 'wv-bar';
-    b.style.height = (5 + Math.random() * 38) + 'px';
-    b.style.background = (i / 50 * 100) < pct ? '#B8922A' : 'rgba(255,255,255,0.25)';
+    const h = 4 + Math.random()*34;
+    b.style.cssText = `height:${h}px;background:${(i/44*100)<pct?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.2)'}`;
     el.appendChild(b);
   }
 }
 
-function fmtTime(secs) {
-  return `${Math.floor(secs / 60)}:${String(Math.floor(secs % 60)).padStart(2, '0')}`;
-}
-
-
-// ═══════════════════════════════════════
-// LISTEN NOTES API INTEGRATION
-// ═══════════════════════════════════════
-
+// ── LISTEN NOTES ──
 const LISTEN_NOTES_KEY = 'aaca221d7d284540bdc63cdeb09037da';
-const LISTEN_NOTES_BASE = 'https://listen-api.listennotes.com/api/v2';
+const LN_BASE = 'https://listen-api.listennotes.com/api/v2';
 
-// Search queries for each N.I.L.E. category
 const NILE_SEARCHES = [
-  { q: 'breaking news today',           cat: 'News'          },
-  { q: 'technology innovation ai',      cat: 'News'          },
-  { q: 'world politics current events', cat: 'News'          },
-  { q: 'philosophy stoicism wisdom',    cat: 'Issues'        },
-  { q: 'history society culture',       cat: 'Issues'        },
-  { q: 'psychology mind behavior',      cat: 'Issues'        },
-  { q: 'entrepreneurship money career', cat: 'Lifestyle'     },
-  { q: 'health wellness fitness',       cat: 'Lifestyle'     },
-  { q: 'comedy funny humor',            cat: 'Entertainment' },
-  { q: 'music film pop culture sport',  cat: 'Entertainment' },
+  {q:'breaking news today',          cat:'News'},
+  {q:'technology innovation ai',     cat:'News'},
+  {q:'philosophy stoicism wisdom',   cat:'Issues'},
+  {q:'history society culture',      cat:'Issues'},
+  {q:'entrepreneurship health money',cat:'Lifestyle'},
+  {q:'comedy funny storytelling',    cat:'Entertainment'},
 ];
 
-async function fetchListenNotesClips() {
-  const allClips = [];
-  let idCounter = Date.now();
-
-  // Use best_episodes endpoint for curated content
-  try {
-    const res = await fetch(`${LISTEN_NOTES_BASE}/best_podcasts?page=1&region=us&safe_mode=0`, {
-      headers: { 'X-ListenAPI-Key': LISTEN_NOTES_KEY }
-    });
-
-    if (res.status === 429) {
-      console.warn('Listen Notes rate limit hit');
-      return [];
-    }
-
-    if (!res.ok) {
-      console.warn('Listen Notes error:', res.status);
-      return [];
-    }
-
-    const data = await res.json();
-    const podcasts = data.podcasts || [];
-
-    // For each podcast get latest episode
-    for (const podcast of podcasts.slice(0, 12)) {
-      try {
-        const epRes = await fetch(`${LISTEN_NOTES_BASE}/podcasts/${podcast.id}?sort=recent_first&next_episode_pub_date=0`, {
-          headers: { 'X-ListenAPI-Key': LISTEN_NOTES_KEY }
-        });
-        if (!epRes.ok) continue;
-        const epData = await epRes.json();
-        const episode = (epData.episodes || [])[0];
-        if (!episode || !episode.audio) continue;
-
-        const cat = guessCat(podcast.title + ' ' + (podcast.description || ''));
-        const imgUrl = podcast.image || episode.image || CAT_IMAGES[cat] || '';
-
-        allClips.push({
-          id: 'ln_' + (idCounter++),
-          title: episode.title?.slice(0, 80) || podcast.title,
-          creator: podcast.title,
-          handle: '@' + podcast.title.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15),
-          verified: true,
-          desc: (episode.description || podcast.description || '').replace(/<[^>]+>/g, '').slice(0, 120),
-          tags: '#' + cat.toLowerCase().replace(/\s/g, '') + ' #podcast',
-          cat,
-          duration: episode.audio_length_sec || 300,
-          bg: CAT_IMAGES[cat] || CAT_IMAGES['News'],
-          initials: podcast.title.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
-          color: 'linear-gradient(135deg,#B8922A,#8B5E3C)',
-          plays: Math.floor(Math.random() * 500 + 10) + 'K',
-          likes: Math.floor(Math.random() * 50 + 1) + 'K',
-          audioUrl: episode.audio,
-          imageUrl: imgUrl,
-          podcastId: podcast.id,
-          episodeId: episode.id,
-          isListenNotes: true,
-        });
-      } catch(e) { continue; }
-    }
-  } catch(e) {
-    console.warn('Listen Notes fetch error:', e);
-  }
-
-  return allClips;
+function guessCat(text) {
+  const t = text.toLowerCase();
+  if (t.match(/news|politic|world|breaking|tech|science|ai/)) return 'News';
+  if (t.match(/philosoph|stoic|wisdom|psych|histor|society/)) return 'Issues';
+  if (t.match(/lifestyle|health|wellness|business|money|career/)) return 'Lifestyle';
+  if (t.match(/comedy|music|film|sport|entertain|celebrity/)) return 'Entertainment';
+  return 'Issues';
 }
 
 async function searchListenNotes(query, cat) {
   try {
-    const url = `${LISTEN_NOTES_BASE}/search?q=${encodeURIComponent(query)}&type=episode&len_min=1&len_max=10&safe_mode=0&language=English`;
-    const res = await fetch(url, {
-      headers: { 'X-ListenAPI-Key': LISTEN_NOTES_KEY }
+    const res = await fetch(`${LN_BASE}/search?q=${encodeURIComponent(query)}&type=episode&len_min=1&len_max=10&safe_mode=0&language=English`, {
+      headers: {'X-ListenAPI-Key': LISTEN_NOTES_KEY}
     });
     if (!res.ok) return [];
     const data = await res.json();
-    const results = data.results || [];
-
-    return results.slice(0, 3).map((ep, i) => ({
-      id: 'lns_' + Date.now() + '_' + i,
-      title: ep.title_original?.slice(0, 80) || ep.title_highlighted?.replace(/<[^>]+>/g,'').slice(0,80) || 'Untitled',
+    return (data.results||[]).slice(0,3).map((ep,i) => ({
+      id: 'ln_'+Date.now()+'_'+i,
+      title: (ep.title_original||'').slice(0,80),
       creator: ep.podcast?.title_original || 'Podcast',
-      handle: '@' + (ep.podcast?.title_original || 'podcast').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15),
+      handle: '@'+(ep.podcast?.title_original||'podcast').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,15),
       verified: true,
-      desc: (ep.description_original || '').replace(/<[^>]+>/g, '').slice(0, 120),
-      tags: '#' + cat.toLowerCase().replace(/\s/g, '') + ' #podcast',
+      desc: (ep.description_original||'').replace(/<[^>]+>/g,'').slice(0,120),
+      tags: '#'+cat.toLowerCase()+' #podcast',
       cat,
-      duration: ep.audio_length_sec || 300,
-      bg: CAT_IMAGES[cat] || CAT_IMAGES['News'],
-      initials: (ep.podcast?.title_original || 'P').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
-      color: 'linear-gradient(135deg,#B8922A,#8B5E3C)',
-      plays: Math.floor(Math.random() * 500 + 10) + 'K',
-      likes: Math.floor(Math.random() * 50 + 1) + 'K',
-      audioUrl: ep.audio,
-      imageUrl: ep.image || ep.podcast?.image || '',
+      duration: ep.audio_length_sec||300,
+      plays: Math.floor(Math.random()*500+10)+'K',
+      likes: Math.floor(Math.random()*50+1)+'K',
+      audioUrl: ep.audio||'',
+      podcastImage: ep.image||ep.podcast?.image||'',
+      podcastUrl: ep.listennotes_url||'',
+      podcastDesc: (ep.podcast?.description||'').replace(/<[^>]+>/g,'').slice(0,200),
+      podcastTitle: ep.podcast?.title_original||'',
+      episodeUrl: ep.listennotes_url||'',
       isListenNotes: true,
     }));
-  } catch(e) {
-    return [];
-  }
+  } catch(e) { return []; }
 }
 
-function guessCat(text) {
-  const t = text.toLowerCase();
-  // N — News
-  if (t.match(/news|politic|world|breaking|daily|report|tech|science|ai|software|digital|climate|economy/)) return 'News';
-  // I — Issues
-  if (t.match(/philosoph|stoic|wisdom|psychology|mind|think|histor|true crime|mystery|society|culture|debate|social/)) return 'Issues';
-  // L — Lifestyle
-  if (t.match(/lifestyle|health|wellness|fitness|food|travel|fashion|business|entrepreneur|startup|invest|finance|money|market|career|productivity|self/)) return 'Lifestyle';
-  // E — Entertainment
-  if (t.match(/comedy|humor|funny|laugh|joke|music|art|film|tv|sport|game|entertain|story|fiction|celebrity|pop/)) return 'Entertainment';
-  return 'Issues';
-}
-
-
-// ── LOAD CLIPS FROM SUPABASE ──
+// ── LOAD CLIPS ──
 async function loadClipsFromDB() {
-  document.getElementById('feed-loading').style.display = 'flex';
+  const loadEl = document.getElementById('feed-loading');
+  if (loadEl) loadEl.style.display = 'flex';
 
-  let dbClips = [];
-  let lnClips = [];
+  let dbClips = [], lnClips = [];
 
-  // Load from Supabase
   try {
-    const { data, error } = await db
-      .from('clips')
-      .select('*')
-      .eq('status', 'published')
-      .order('created_at', { ascending: false });
-
-    if (!error && data && data.length > 0) {
-      dbClips = data.map(clip => ({
-        id: clip.id,
-        title: clip.title,
-        creator: clip.rss_source || 'The Nile Library',
-        handle: '@' + (clip.rss_source || 'thenile').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15),
+    const {data, error} = await db.from('clips').select('*').eq('status','published').order('created_at',{ascending:false});
+    if (!error && data?.length) {
+      dbClips = data.map(c => ({
+        id: c.id,
+        title: c.title,
+        creator: c.rss_source||'The Nile',
+        handle: '@'+(c.rss_source||'thenile').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,15),
         verified: true,
-        desc: clip.description || '',
-        tags: (clip.hashtags || []).map(t => '#' + t).join(' '),
-        cat: clip.category || 'Education',
-        duration: clip.duration_seconds || 90,
-        bg: CAT_GRADIENTS[clip.category] || CAT_GRADIENTS['Education'],
-        initials: (clip.rss_source || 'N').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
-        color: 'linear-gradient(135deg,#B8922A,#8B5E3C)',
-        plays: clip.play_count ? clip.play_count.toLocaleString() : '0',
-        likes: clip.like_count ? clip.like_count.toLocaleString() : '0',
-        audioUrl: clip.audio_url || '',
-        imageUrl: '',
+        desc: c.description||'',
+        tags: (c.hashtags||[]).map(t=>'#'+t).join(' '),
+        cat: c.category||'Issues',
+        duration: c.duration_seconds||90,
+        plays: c.play_count?c.play_count.toLocaleString():'0',
+        likes: c.like_count?c.like_count.toLocaleString():'0',
+        audioUrl: c.audio_url||'',
+        podcastImage: '',
       }));
     }
-  } catch(e) {
-    console.warn('DB load error:', e);
-  }
+  } catch(e) { console.warn('DB error:', e); }
 
-  // Load from Listen Notes in parallel
   try {
-    const searchPromises = NILE_SEARCHES.slice(0, 4).map(s => searchListenNotes(s.q, s.cat));
-    const results = await Promise.allSettled(searchPromises);
-    results.forEach(r => {
-      if (r.status === 'fulfilled') lnClips.push(...r.value);
-    });
-  } catch(e) {
-    console.warn('Listen Notes error:', e);
+    const results = await Promise.allSettled(
+      NILE_SEARCHES.slice(0,4).map(s => searchListenNotes(s.q, s.cat))
+    );
+    results.forEach(r => { if (r.status==='fulfilled') lnClips.push(...r.value); });
+  } catch(e) { console.warn('LN error:', e); }
+
+  // Interleave: 2 db clips, 1 podcast, repeat
+  const merged = [];
+  let di=0, li=0;
+  while (di < dbClips.length || li < lnClips.length) {
+    if (di < dbClips.length) merged.push(dbClips[di++]);
+    if (di < dbClips.length) merged.push(dbClips[di++]);
+    if (li < lnClips.length) merged.push(lnClips[li++]);
   }
 
-  // Combine: DB clips first, then Listen Notes, shuffle Listen Notes
-  const shuffledLN = lnClips.sort(() => Math.random() - 0.5);
-  clips = dbClips.length > 0
-    ? [...dbClips, ...shuffledLN]
-    : shuffledLN.length > 0
-      ? shuffledLN
-      : FALLBACK_CLIPS;
-
-  document.getElementById('feed-loading').style.display = 'none';
+  clips = merged.length ? merged : FALLBACK_CLIPS;
+  if (loadEl) loadEl.style.display = 'none';
   currentIdx = 0;
   buildFeed();
-
-  const total = clips.length;
-  const sources = [];
-  if (dbClips.length > 0) sources.push(dbClips.length + ' library clips');
-  if (lnClips.length > 0) sources.push(lnClips.length + ' live podcasts');
-  if (sources.length > 0) showToast('Loaded ' + sources.join(' + '));
+  showToast(`${clips.length} clips ready`);
 }
 
+// ── BUILD FEED ──
 function buildFeed() {
   const container = document.getElementById('feed-scroll');
+  if (!container) return;
   container.innerHTML = '';
 
   clips.forEach((clip, i) => {
     const pct = clipProgress[clip.id] || 0;
-    const elapsed = Math.floor(clip.duration * pct / 100);
+    const elapsed = Math.floor((clip.duration||0) * pct / 100);
+    const colors = getGradient(clip);
+    const bg = colors ? buildGradientBg(colors) : '';
+    const hasPodcastImg = !!clip.podcastImage;
+
     const card = document.createElement('div');
     card.className = 'clip-card';
     card.id = 'card-' + clip.id;
-    card.style.height = '100%';
 
-    const clipImg = getClipImage(clip);
     card.innerHTML = `
-      <!-- Portrait card -->
-      <div class="clip-center">
-        <div class="clip-center-img" style="background-image:url(${clipImg})"></div>
-        <div class="clip-center-overlay"></div>
+      <!-- Background -->
+      <div class="clip-bg" style="${hasPodcastImg
+        ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center;`
+        : `background:${bg};`
+      }"></div>
+      ${hasPodcastImg ? '<div class="clip-bg-blur"></div>' : ''}
+      <div class="clip-bg-overlay"></div>
 
-        <!-- NYT top bar -->
-        <div class="clip-nyt-header">
-          <span class="clip-nyt-edition">The Nile · ${clip.cat}</span>
-          <span class="clip-nyt-num">${String(i+1).padStart(2,'0')} / ${String(clips.length).padStart(2,'0')}</span>
+      <!-- Portrait card -->
+      <div class="clip-card-inner">
+
+        <!-- Top bar -->
+        <div class="clip-top-bar">
+          <span class="clip-cat-pill">${clip.cat}</span>
+          <span class="clip-counter">${String(i+1).padStart(2,'0')} / ${String(clips.length).padStart(2,'0')}</span>
         </div>
 
         <!-- Bottom content -->
-        <div class="clip-center-content">
-          <div class="clip-creator-strip">
-            <div class="clip-creator-photo" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')"></div>
-            <span class="clip-creator-name" onclick="openPodcastProfile('${clip.id}')">${clip.creator}</span>
-            <button class="follow-pill ${followedCreators[clip.id] ? 'following' : ''}" id="fp-${clip.id}" onclick="toggleFollow('${clip.id}')">${followedCreators[clip.id] ? 'Following' : 'Follow'}</button>
-          </div>
-          <div class="clip-headline">${clip.title}</div>
-          <div class="clip-standfirst">${clip.desc || ''}</div>
-          <div class="clip-article-tags">${clip.tags}</div>
-          <div class="clip-inline-player">
-            <div class="waveform" id="wv-${clip.id}" onclick="seekWaveform(event,'${clip.id}')"></div>
-            <div class="progress-row">
-              <span class="time-label" id="et-${clip.id}">${fmtTime(elapsed)}</span>
-              <div class="progress-track" onclick="seekTrack(event,'${clip.id}')">
-                <div class="progress-fill" id="pf-${clip.id}" style="width:${pct}%"></div>
-              </div>
-              <span class="time-label">${fmtTime(clip.duration)}</span>
+        <div class="clip-bottom">
+          <!-- Creator row -->
+          <div class="clip-creator-row">
+            <div class="clip-avatar" style="${hasPodcastImg?`background-image:url(${clip.podcastImage});background-size:cover;background-position:center`:`background:${bg}`}" onclick="openPodcastProfile('${clip.id}')">
+              ${!hasPodcastImg ? `<span>${buildInitials(clip.creator)}</span>` : ''}
             </div>
-            <div class="player-controls">
-              <button class="ctrl-btn" onclick="rewind10('${clip.id}')"><i class="ti ti-rewind-10"></i></button>
-              <button class="ctrl-btn" onclick="prevClip()"><i class="ti ti-skip-back"></i></button>
-              <button class="play-btn" onclick="togglePlay('${clip.id}')">
-                <i class="ti ${i === currentIdx && isPlaying ? 'ti-player-pause' : 'ti-player-play'}" id="pi-${clip.id}"></i>
+            <span class="clip-creator-name" onclick="openPodcastProfile('${clip.id}')">${clip.creator}</span>
+            <button class="clip-follow-btn ${followedCreators[clip.id]?'following':''}" id="fp-${clip.id}" onclick="toggleFollow('${clip.id}')">${followedCreators[clip.id]?'Following':'Follow'}</button>
+          </div>
+
+          <!-- Headline — NYT Serif -->
+          <div class="clip-headline">${clip.title}</div>
+
+          <!-- Standfirst -->
+          ${clip.desc ? `<div class="clip-desc">${clip.desc.slice(0,100)}</div>` : ''}
+
+          <!-- Tags -->
+          <div class="clip-tags">${clip.tags}</div>
+
+          <!-- Player -->
+          <div class="clip-player">
+            <div class="waveform" id="wv-${clip.id}" onclick="seekWaveform(event,'${clip.id}')"></div>
+            <div class="clip-progress-row">
+              <span class="clip-time" id="et-${clip.id}">${fmtTime(elapsed)}</span>
+              <div class="clip-progress-track" onclick="seekTrack(event,'${clip.id}')">
+                <div class="clip-progress-fill" id="pf-${clip.id}" style="width:${pct}%"></div>
+              </div>
+              <span class="clip-time">${fmtTime(clip.duration)}</span>
+            </div>
+            <div class="clip-controls">
+              <button class="clip-ctrl" onclick="rewind10('${clip.id}')"><i class="ti ti-rewind-10"></i></button>
+              <button class="clip-ctrl" onclick="prevClip()"><i class="ti ti-skip-back"></i></button>
+              <button class="clip-play-btn" onclick="togglePlay('${clip.id}')">
+                <i class="ti ${i===currentIdx&&isPlaying?'ti-player-pause':'ti-player-play'}" id="pi-${clip.id}"></i>
               </button>
-              <button class="ctrl-btn" onclick="nextClip()"><i class="ti ti-skip-forward"></i></button>
-              <button class="speed-tag" onclick="cycleSpeed()">${currentSpeed}x</button>
+              <button class="clip-ctrl" onclick="nextClip()"><i class="ti ti-skip-forward"></i></button>
+              <button class="clip-speed" onclick="cycleSpeed()">${currentSpeed}x</button>
             </div>
           </div>
         </div>
+
       </div>
 
-      <!-- Right action buttons — TikTok style -->
+      <!-- Right actions — TikTok style -->
       <div class="clip-actions">
-        <div class="clip-action-avatar" style="background-image:url(${clip.podcastImage || clipImg})" onclick="openPodcastProfile('${clip.id}')">
-          <div class="clip-action-avatar-plus">+</div>
+        <div class="clip-action-avatar-wrap" onclick="openPodcastProfile('${clip.id}')">
+          <div class="clip-action-av" style="${hasPodcastImg?`background-image:url(${clip.podcastImage});background-size:cover;background-position:center`:`background:${bg}`}">
+            ${!hasPodcastImg?`<span style="font-size:13px;font-weight:700;color:#fff;font-family:var(--font-mono)">${buildInitials(clip.creator)}</span>`:''}
+          </div>
+          <div class="clip-action-plus">+</div>
         </div>
-        <div class="action-btn ${likedClips[clip.id] ? 'liked' : ''}" onclick="toggleLike('${clip.id}',this)">
-          <div class="action-circle"><i class="ti ti-heart${likedClips[clip.id] ? '-filled' : ''}"></i></div>
-          <span class="action-count" id="lc-${clip.id}">${clip.likes}</span>
+        <div class="clip-action-btn ${likedClips[clip.id]?'active':''}" onclick="toggleLike('${clip.id}',this)">
+          <div class="clip-action-icon"><i class="ti ti-heart"></i></div>
+          <span class="clip-action-count" id="lc-${clip.id}">${clip.likes}</span>
         </div>
-        <div class="action-btn" onclick="openComments('${clip.id}')">
-          <div class="action-circle"><i class="ti ti-message-circle"></i></div>
-          <span class="action-count">${(allComments[clip.id] || []).length || 0}</span>
+        <div class="clip-action-btn" onclick="openComments('${clip.id}')">
+          <div class="clip-action-icon"><i class="ti ti-message-circle-2"></i></div>
+          <span class="clip-action-count">${(allComments[clip.id]||[]).length||0}</span>
         </div>
-        <div class="action-btn ${savedClips[clip.id] ? 'saved' : ''}" onclick="toggleSave('${clip.id}',this)">
-          <div class="action-circle"><i class="ti ti-bookmark"></i></div>
-          <span class="action-count">0</span>
+        <div class="clip-action-btn ${savedClips[clip.id]?'active':''}" onclick="toggleSave('${clip.id}',this)">
+          <div class="clip-action-icon"><i class="ti ti-bookmark"></i></div>
         </div>
-        <div class="action-btn" onclick="shareClip('${clip.id}')">
-          <div class="action-circle"><i class="ti ti-share-2"></i></div>
-          <span class="action-count">${clip.plays}</span>
+        <div class="clip-action-btn" onclick="shareClip('${clip.id}')">
+          <div class="clip-action-icon"><i class="ti ti-share-2"></i></div>
+          <span class="clip-action-count">${clip.plays}</span>
         </div>
-      </div>`
+      </div>`;
 
     container.appendChild(card);
-    buildWaveform('wv-' + clip.id, pct);
+    buildWaveform('wv-'+clip.id, pct);
   });
 
   // Intersection observer for auto-play on scroll
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      if (e.intersectionRatio > 0.7) {
-        const rawId = e.target.id.replace('card-', '');
+      if (e.intersectionRatio > 0.8) {
+        const rawId = e.target.id.replace('card-','');
         const idx = clips.findIndex(c => String(c.id) === rawId);
         if (idx !== -1 && idx !== currentIdx) {
           stopAudio();
           currentIdx = idx;
           isPlaying = true;
           updatePlayIcons();
+          updatePlayerBar();
           startAudio();
         }
       }
     });
-  }, { threshold: 0.7 });
+  }, {threshold: 0.8});
 
   document.querySelectorAll('.clip-card').forEach(el => obs.observe(el));
   updatePlayerBar();
@@ -478,11 +372,11 @@ function buildFeed() {
 
 function updatePlayIcons() {
   clips.forEach(c => {
-    const el = document.getElementById('pi-' + c.id);
-    if (el) el.className = 'ti ' + (String(c.id) === String(clips[currentIdx]?.id) && isPlaying ? 'ti-player-pause' : 'ti-player-play');
+    const el = document.getElementById('pi-'+c.id);
+    if (el) el.className = 'ti '+(String(c.id)===String(clips[currentIdx]?.id)&&isPlaying?'ti-player-pause':'ti-player-play');
   });
   const pbIcon = document.getElementById('pb-play-icon');
-  if (pbIcon) pbIcon.className = 'ti ' + (isPlaying ? 'ti-player-pause' : 'ti-player-play');
+  if (pbIcon) pbIcon.className = 'ti '+(isPlaying?'ti-player-pause':'ti-player-play');
 }
 
 function updatePlayerBar() {
@@ -504,8 +398,7 @@ function togglePlay(clipId) {
   }
   isPlaying = !isPlaying;
   updatePlayIcons();
-  if (isPlaying) startAudio();
-  else stopAudio();
+  if (isPlaying) startAudio(); else stopAudio();
   updatePlayerBar();
 }
 
@@ -534,23 +427,24 @@ function startFakeProgress() {
   const clip = clips[currentIdx];
   if (!clip) return;
   progressInterval = setInterval(() => {
-    const cur = clipProgress[clip.id] || 0;
-    const step = (100 / clip.duration) * 0.1 * currentSpeed;
-    const newPct = Math.min(100, cur + step);
-    clipProgress[clip.id] = newPct;
-    updateProgressUI(clip.id, newPct, clip.duration * newPct / 100);
-    if (newPct >= 100) { stopFakeProgress(); isPlaying = false; updatePlayIcons(); nextClip(); }
+    const cur = clipProgress[clip.id]||0;
+    const step = (100/clip.duration)*0.1*currentSpeed;
+    const np = Math.min(100, cur+step);
+    clipProgress[clip.id] = np;
+    updateProgressUI(clip.id, np, clip.duration*np/100);
+    if (np>=100) { stopFakeProgress(); isPlaying=false; updatePlayIcons(); setTimeout(()=>nextClip(),800); }
   }, 100);
 }
 
 function stopFakeProgress() {
-  if (progressInterval) { clearInterval(progressInterval); progressInterval = null; }
+  if (progressInterval) { clearInterval(progressInterval); progressInterval=null; }
 }
 
 function nextClip() {
   stopAudio();
-  currentIdx = (currentIdx + 1) % clips.length;
-  document.getElementById('card-' + clips[currentIdx].id)?.scrollIntoView({ behavior: 'smooth' });
+  currentIdx = (currentIdx+1)%clips.length;
+  const card = document.getElementById('card-'+clips[currentIdx].id);
+  if (card) card.scrollIntoView({behavior:'smooth',block:'start'});
   isPlaying = true;
   updatePlayIcons();
   startAudio();
@@ -559,8 +453,9 @@ function nextClip() {
 
 function prevClip() {
   stopAudio();
-  currentIdx = (currentIdx - 1 + clips.length) % clips.length;
-  document.getElementById('card-' + clips[currentIdx].id)?.scrollIntoView({ behavior: 'smooth' });
+  currentIdx = (currentIdx-1+clips.length)%clips.length;
+  const card = document.getElementById('card-'+clips[currentIdx].id);
+  if (card) card.scrollIntoView({behavior:'smooth',block:'start'});
   isPlaying = true;
   updatePlayIcons();
   startAudio();
@@ -569,155 +464,122 @@ function prevClip() {
 
 function seekTrack(e, id) {
   const rect = e.currentTarget.getBoundingClientRect();
-  const pct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+  const pct = Math.max(0,Math.min(100,((e.clientX-rect.left)/rect.width)*100));
   clipProgress[id] = pct;
-  const clip = clips.find(c => String(c.id) === String(id));
-  if (clip && clip.audioUrl && audioEl.duration) {
-    audioEl.currentTime = (pct / 100) * audioEl.duration;
-  }
-  const fill = document.getElementById('pf-' + id);
-  if (fill) fill.style.width = pct + '%';
-  buildWaveform('wv-' + id, pct);
+  const clip = clips.find(c=>String(c.id)===String(id));
+  if (clip?.audioUrl && audioEl.duration) audioEl.currentTime = (pct/100)*audioEl.duration;
+  const fill = document.getElementById('pf-'+id);
+  if (fill) fill.style.width = pct+'%';
+  buildWaveform('wv-'+id, pct);
 }
-
 function seekWaveform(e, id) { seekTrack(e, id); }
 
 function rewind10(id) {
-  const clip = clips.find(c => String(c.id) === String(id));
+  const clip = clips.find(c=>String(c.id)===String(id));
   if (!clip) return;
-  const cur = clipProgress[id] || 0;
-  clipProgress[id] = Math.max(0, cur - (10 / clip.duration) * 100);
-  if (clip.audioUrl && audioEl.duration) audioEl.currentTime = Math.max(0, audioEl.currentTime - 10);
-  const fill = document.getElementById('pf-' + id);
-  if (fill) fill.style.width = clipProgress[id] + '%';
-  buildWaveform('wv-' + id, clipProgress[id]);
+  const cur = clipProgress[id]||0;
+  clipProgress[id] = Math.max(0, cur-(10/clip.duration)*100);
+  if (clip.audioUrl && audioEl.duration) audioEl.currentTime = Math.max(0, audioEl.currentTime-10);
+  const fill = document.getElementById('pf-'+id);
+  if (fill) fill.style.width = clipProgress[id]+'%';
+  buildWaveform('wv-'+id, clipProgress[id]);
 }
 
 function cycleSpeed() {
-  currentSpeed = SPEEDS[(SPEEDS.indexOf(currentSpeed) + 1) % SPEEDS.length];
-  document.querySelectorAll('.speed-tag').forEach(b => b.textContent = currentSpeed + 'x');
+  currentSpeed = SPEEDS[(SPEEDS.indexOf(currentSpeed)+1)%SPEEDS.length];
+  document.querySelectorAll('.clip-speed').forEach(b => b.textContent = currentSpeed+'x');
   if (audioEl) audioEl.playbackRate = currentSpeed;
-  showToast('Speed: ' + currentSpeed + 'x');
+  showToast('Speed: '+currentSpeed+'x');
 }
 
 function toggleLike(id, el) {
   likedClips[id] = !likedClips[id];
-  el.classList.toggle('liked', likedClips[id]);
+  el.classList.toggle('active', likedClips[id]);
+  const icon = el.querySelector('i');
+  if (icon) icon.className = likedClips[id] ? 'ti ti-heart-filled' : 'ti ti-heart';
 }
 
 function toggleSave(id, el) {
   savedClips[id] = !savedClips[id];
-  el.classList.toggle('saved', savedClips[id]);
-  showToast(savedClips[id] ? 'Saved!' : 'Removed from saved');
+  el.classList.toggle('active', savedClips[id]);
+  showToast(savedClips[id] ? 'Saved!' : 'Removed');
 }
 
 function toggleFollow(id) {
   followedCreators[id] = !followedCreators[id];
-  const btn = document.getElementById('fp-' + id);
-  if (btn) {
-    btn.classList.toggle('following', followedCreators[id]);
-    btn.textContent = followedCreators[id] ? 'Following' : 'Follow';
-  }
-  if (followedCreators[id]) showToast('Following!');
+  const btn = document.getElementById('fp-'+id);
+  if (btn) { btn.classList.toggle('following', followedCreators[id]); btn.textContent = followedCreators[id]?'Following':'Follow'; }
+  showToast(followedCreators[id]?'Following!':'Unfollowed');
 }
 
 function shareClip(id) {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(window.location.href + '#clip-' + id);
-    showToast('Link copied!');
-  }
+  if (navigator.clipboard) { navigator.clipboard.writeText(window.location.href+'#clip-'+id); showToast('Link copied!'); }
 }
 
 function openComments(id) {
   currentCommentClip = id;
   const list = document.getElementById('comments-list');
   list.innerHTML = '';
-  const clipComments = allComments[id] || [];
-  if (clipComments.length === 0) {
-    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted2);font-size:13px">No comments yet. Be the first!</div>';
+  const cc = allComments[id]||[];
+  if (!cc.length) {
+    list.innerHTML = '<div style="text-align:center;padding:32px;color:rgba(22,24,35,0.4);font-size:14px">No comments yet</div>';
   } else {
-    clipComments.forEach(c => {
+    cc.forEach(c => {
       const div = document.createElement('div');
       div.className = 'comment-item';
-      div.innerHTML = `
-        <div class="avatar" style="width:32px;height:32px;font-size:12px">${c.user.slice(1,3).toUpperCase()}</div>
-        <div>
-          <div class="comment-user">${c.user}</div>
-          <div class="comment-text">${c.text}</div>
-          <div class="comment-time">${c.time}</div>
-        </div>`;
+      div.innerHTML = `<div class="avatar" style="width:32px;height:32px;font-size:11px">${c.user.slice(1,3).toUpperCase()}</div><div><div class="comment-user">${c.user}</div><div class="comment-text">${c.text}</div><div class="comment-time">${c.time}</div></div>`;
       list.appendChild(div);
     });
   }
   document.getElementById('modal-comments').style.display = 'flex';
 }
 
-// Called when app loads — replaces loadRSSFeeds
-async function loadRSSFeeds() {
-  await loadClipsFromDB();
-}
-
-
-// ═══════════════════════════════════════
-// PODCAST PROFILE MODAL
-// ═══════════════════════════════════════
-
+// Podcast profile modal
 function openPodcastProfile(clipId) {
   const clip = clips.find(c => String(c.id) === String(clipId));
   if (!clip) return;
-
-  // Remove existing modal if any
   const existing = document.getElementById('podcast-profile-modal');
   if (existing) existing.remove();
-
-  const img = clip.podcastImage || getClipImage(clip);
-  const podcastUrl = clip.podcastUrl || clip.podcastListenUrl || '';
+  const colors = getGradient(clip);
+  const bgStyle = clip.podcastImage ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center` : `background:${buildGradientBg(colors||['#1a1a2e','#16213e','#0f3460'])}`;
+  const podcastUrl = clip.podcastUrl || '';
   const episodeUrl = clip.episodeUrl || '';
 
   const modal = document.createElement('div');
   modal.id = 'podcast-profile-modal';
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:500;display:flex;align-items:flex-end;justify-content:center';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(12px);z-index:500;display:flex;align-items:flex-end;justify-content:center;';
   modal.innerHTML = `
-    <div style="background:#FAFAF7;width:100%;max-width:540px;border-radius:8px 8px 0 0;border-top:2px solid #0A0A08;max-height:85vh;overflow-y:auto">
-      <!-- COVER -->
-      <div style="height:140px;background-image:url(${img});background-size:cover;background-position:center;position:relative;border-radius:8px 8px 0 0;overflow:hidden">
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(250,248,244,0.95) 100%)"></div>
-        <button onclick="document.getElementById('podcast-profile-modal').remove()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(250,248,244,0.9);border:1px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:#0A0A08"><i class="ti ti-x"></i></button>
+    <div style="background:#fff;width:100%;max-width:480px;border-radius:16px 16px 0 0;max-height:85vh;overflow-y:auto">
+      <div style="${bgStyle};height:120px;border-radius:16px 16px 0 0;position:relative">
+        <button onclick="document.getElementById('podcast-profile-modal').remove()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,0.3);border:none;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:#fff"><i class="ti ti-x"></i></button>
       </div>
-      <!-- PROFILE INFO -->
-      <div style="padding:0 24px 24px">
-        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:-28px;margin-bottom:14px">
-          <div style="width:64px;height:64px;border-radius:4px;background-image:url(${img});background-size:cover;background-position:center;border:3px solid #FAFAF7;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div>
+      <div style="padding:0 20px 24px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:-22px;margin-bottom:14px">
+          <div style="width:52px;height:52px;border-radius:8px;${bgStyle};border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div>
           <div style="display:flex;gap:8px">
-            ${podcastUrl ? `<a href="${podcastUrl}" target="_blank" style="padding:7px 14px;background:#B8922A;border-radius:2px;font-family:var(--font-mono);font-size:10px;font-weight:500;color:#FAFAF7;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none">Visit Website</a>` : ''}
-            ${episodeUrl ? `<a href="${episodeUrl}" target="_blank" style="padding:7px 14px;border:1px solid rgba(0,0,0,0.15);border-radius:2px;font-family:var(--font-mono);font-size:10px;font-weight:500;color:#0A0A08;letter-spacing:0.8px;text-transform:uppercase;text-decoration:none">Listen Notes</a>` : ''}
+            ${podcastUrl?`<a href="${podcastUrl}" target="_blank" style="padding:8px 14px;background:#161823;border-radius:4px;font-family:var(--font-mono);font-size:10px;color:#fff;letter-spacing:0.5px;text-decoration:none">Website</a>`:''}
+            ${episodeUrl?`<a href="${episodeUrl}" target="_blank" style="padding:8px 14px;border:1px solid rgba(22,24,35,0.15);border-radius:4px;font-family:var(--font-mono);font-size:10px;color:#161823;letter-spacing:0.5px;text-decoration:none">Listen Notes</a>`:''}
           </div>
         </div>
-        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;font-style:italic;color:#0A0A08;letter-spacing:-0.5px;margin-bottom:4px">${clip.creator}</div>
+        <div style="font-family:var(--font-serif);font-size:20px;font-weight:800;font-style:italic;color:#161823;margin-bottom:4px;letter-spacing:-0.3px">${clip.creator}</div>
         <div style="font-family:var(--font-mono);font-size:10px;color:#B8922A;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">${clip.cat}</div>
-        ${clip.podcastDesc ? `<div style="font-size:13px;color:rgba(10,10,8,0.6);line-height:1.65;font-style:italic;border-left:2px solid rgba(184,146,42,0.3);padding-left:12px;margin-bottom:20px">${clip.podcastDesc}</div>` : ''}
-
-        <!-- CURRENT EPISODE -->
-        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(10,10,8,0.3);border-bottom:1px solid rgba(0,0,0,0.08);padding-bottom:8px;margin-bottom:14px">Current Episode</div>
-        <div style="display:flex;gap:12px;align-items:flex-start;padding:14px;background:rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.08);border-radius:2px;cursor:pointer" onclick="document.getElementById('podcast-profile-modal').remove();togglePlay('${clip.id}')">
-          <div style="width:48px;height:48px;border-radius:2px;background-image:url(${img});background-size:cover;background-position:center;flex-shrink:0"></div>
+        ${clip.podcastDesc?`<div style="font-size:13px;color:rgba(22,24,35,0.6);line-height:1.6;margin-bottom:18px;font-style:italic">${clip.podcastDesc}</div>`:''}
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(22,24,35,0.3);border-bottom:1px solid rgba(22,24,35,0.08);padding-bottom:8px;margin-bottom:14px">Now Playing</div>
+        <div style="display:flex;gap:12px;align-items:center;padding:12px;background:#F8F8F8;border-radius:8px;cursor:pointer" onclick="document.getElementById('podcast-profile-modal').remove();togglePlay('${clip.id}')">
+          <div style="width:44px;height:44px;border-radius:6px;${bgStyle};flex-shrink:0"></div>
           <div style="flex:1;min-width:0">
-            <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;font-style:italic;color:#0A0A08;line-height:1.3;margin-bottom:5px">${clip.title}</div>
-            <div style="font-family:var(--font-mono);font-size:10px;color:rgba(10,10,8,0.3)">${clip.cat.toUpperCase()} · ${fmtTime(clip.duration)}</div>
+            <div style="font-family:var(--font-serif);font-size:14px;font-weight:700;font-style:italic;color:#161823;line-height:1.3;margin-bottom:3px">${clip.title}</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:rgba(22,24,35,0.4)">${clip.cat} · ${fmtTime(clip.duration)}</div>
           </div>
-          <div style="width:36px;height:36px;border-radius:50%;background:#B8922A;display:flex;align-items:center;justify-content:center;font-size:14px;color:#FAFAF7;flex-shrink:0"><i class="ti ti-player-play"></i></div>
+          <div style="width:34px;height:34px;border-radius:50%;background:#161823;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff"><i class="ti ti-player-play"></i></div>
         </div>
-
-        ${episodeUrl ? `
-        <div style="margin-top:16px;text-align:center">
-          <a href="${episodeUrl}" target="_blank" style="font-family:var(--font-mono);font-size:10px;color:rgba(10,10,8,0.3);letter-spacing:1px;text-decoration:none">
-            Powered by Listen Notes <i class="ti ti-external-link" style="font-size:11px"></i>
-          </a>
-        </div>` : ''}
       </div>
     </div>`;
 
-  // Close on backdrop click
-  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+  modal.onclick = e => { if (e.target===modal) modal.remove(); };
   document.body.appendChild(modal);
+}
+
+async function loadRSSFeeds() {
+  await loadClipsFromDB();
 }
