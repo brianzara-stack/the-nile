@@ -2,218 +2,284 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>The Nile — N.I.L.E.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>The Nile</title>
+
+<!-- Favicon — italic N -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23000'/><text x='16' y='26' text-anchor='middle' font-family='Georgia,serif' font-size='26' font-style='italic' font-weight='700' fill='%23fff'>N</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%23000' rx='40'/><text x='90' y='140' text-anchor='middle' font-family='Georgia,serif' font-size='140' font-style='italic' font-weight='700' fill='%23fff'>N</text></svg>">
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=IM+Fell+English:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+
+<!-- ═══════════════════════════════════
+     APP SHELL
+════════════════════════════════════ -->
 <div id="app">
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-mark">N</div>
-      <span class="logo-text">The Nile</span>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-n">N</div>
+      <span class="sb-wordmark">The Nile</span>
     </div>
-    <button class="nav-btn active" data-view="feed"><i class="ti ti-home"></i><span class="nav-label">For You</span></button>
-    <button class="nav-btn" data-view="discover"><i class="ti ti-compass"></i><span class="nav-label">Discover</span></button>
-    <button class="nav-btn" data-view="activity"><i class="ti ti-bell"></i><span class="nav-label">Activity</span><span class="nav-badge">4</span></button>
-    <button class="nav-btn" data-view="create"><i class="ti ti-circle-plus"></i><span class="nav-label">Contribute</span></button>
-    <button class="nav-btn" data-view="live"><i class="ti ti-broadcast"></i><span class="nav-label">Live</span></button>
-    <button class="nav-btn" data-view="profile"><i class="ti ti-user"></i><span class="nav-label">Profile</span></button>
-    <div class="sidebar-divider"></div>
-    <span class="edition-section-label">Editions</span>
-    <div class="sidebar-editions">
-      <button class="edition-btn" data-cat="News"><div class="edition-dot" style="background:linear-gradient(135deg,#050d18,#0a1e30)">N</div><span class="edition-label">News</span></button>
-      <button class="edition-btn" data-cat="Issues"><div class="edition-dot" style="background:linear-gradient(135deg,#050d08,#0a1e10)">I</div><span class="edition-label">Issues</span></button>
-      <button class="edition-btn" data-cat="Lifestyle"><div class="edition-dot" style="background:linear-gradient(135deg,#0d0518,#1e0a30)">L</div><span class="edition-label">Lifestyle</span></button>
-      <button class="edition-btn" data-cat="Entertainment"><div class="edition-dot" style="background:linear-gradient(135deg,#180505,#300a0a)">E</div><span class="edition-label">Entertainment</span></button>
+
+    <nav class="sb-nav">
+      <button class="sb-item active" data-view="feed">
+        <i class="ti ti-home"></i>
+        <span>For You</span>
+      </button>
+      <button class="sb-item" data-view="discover">
+        <i class="ti ti-compass"></i>
+        <span>Discover</span>
+      </button>
+      <button class="sb-item" data-view="activity">
+        <i class="ti ti-bell"></i>
+        <span>Activity</span>
+        <em class="sb-badge">4</em>
+      </button>
+      <button class="sb-item" data-view="create">
+        <i class="ti ti-circle-plus"></i>
+        <span>Contribute</span>
+      </button>
+      <button class="sb-item" data-view="live">
+        <i class="ti ti-broadcast"></i>
+        <span>Live</span>
+      </button>
+      <button class="sb-item" data-view="profile">
+        <i class="ti ti-user"></i>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-editions-label">Editions</div>
+    <div class="sb-editions">
+      <button class="sb-ed" data-cat="News">
+        <div class="sb-ed-dot" style="background:linear-gradient(135deg,#050d18,#1a2d4a)">N</div>
+        <span>News</span>
+      </button>
+      <button class="sb-ed" data-cat="Issues">
+        <div class="sb-ed-dot" style="background:linear-gradient(135deg,#050d08,#0a2a10)">I</div>
+        <span>Issues</span>
+      </button>
+      <button class="sb-ed" data-cat="Lifestyle">
+        <div class="sb-ed-dot" style="background:linear-gradient(135deg,#100518,#2a0a30)">L</div>
+        <span>Lifestyle</span>
+      </button>
+      <button class="sb-ed" data-cat="Entertainment">
+        <div class="sb-ed-dot" style="background:linear-gradient(135deg,#180505,#3a0a0a)">E</div>
+        <span>Entertainment</span>
+      </button>
     </div>
-    <div class="sidebar-divider"></div>
-    <div class="sidebar-user" id="sidebar-user">
-      <div class="user-av" id="sidebar-av">?</div>
-      <div class="user-info">
-        <div class="user-name" id="sidebar-name">Loading...</div>
-        <div class="user-handle" id="sidebar-handle">@user</div>
+
+    <div class="sb-user" id="sb-user">
+      <div class="sb-av" id="sb-av">?</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name" id="sb-name">—</div>
+        <div class="sb-user-handle" id="sb-handle">@user</div>
       </div>
+      <button class="sb-signout" id="btn-signout" title="Sign out">
+        <i class="ti ti-logout"></i>
+      </button>
     </div>
   </aside>
 
-  <div class="main" id="main">
-    <!-- FEED -->
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- ── FEED ── -->
     <div class="view active" id="view-feed">
-      <div class="feed-header">
+      <div id="feed-header">
         <button class="feed-tab" data-feed="following">Following</button>
         <button class="feed-tab active" data-feed="foryou">For You</button>
       </div>
-      <div class="feed-loading" id="feed-loading">
+      <div id="feed-loading">
         <div class="loader"></div>
-        <div class="feed-loading-title">Preparing your edition</div>
-        <div class="feed-loading-sub">Loading from The Nile library</div>
+        <div class="loading-title">Preparing your edition</div>
+        <div class="loading-sub">The Nile · N.I.L.E.</div>
       </div>
-      <div class="feed-scroll" id="feed-scroll"></div>
-      <div class="feed-arrows">
+      <div id="feed-scroll"></div>
+      <div id="feed-arrows">
         <button class="feed-arrow" id="btn-prev"><i class="ti ti-chevron-up"></i></button>
         <button class="feed-arrow" id="btn-next"><i class="ti ti-chevron-down"></i></button>
       </div>
     </div>
 
-    <!-- DISCOVER -->
+    <!-- ── DISCOVER ── -->
     <div class="view" id="view-discover">
-      <div class="view-page">
-        <div class="view-title">Discover</div>
-        <div class="view-sub">Explore the archive</div>
-        <div class="search-bar"><i class="ti ti-search"></i><input id="discover-search" placeholder="Search clips, voices, topics..."></div>
-        <div class="cat-pills" id="cat-pills"></div>
-        <div class="section-head">Trending</div>
+      <div class="view-inner">
+        <h1 class="view-title">Discover</h1>
+        <p class="view-sub">Search the archive</p>
+        <div class="search-row">
+          <i class="ti ti-search"></i>
+          <input id="discover-search" placeholder="Clips, voices, topics...">
+        </div>
+        <div id="cat-pills"></div>
+        <h2 class="view-section">Trending</h2>
         <div id="trending-list"></div>
-        <div class="section-head">Notable Voices</div>
-        <div class="creators-grid" id="creators-grid"></div>
+        <h2 class="view-section">Notable Voices</h2>
+        <div id="creators-grid"></div>
       </div>
     </div>
 
-    <!-- CONTRIBUTE -->
+    <!-- ── CONTRIBUTE ── -->
     <div class="view" id="view-create">
-      <div class="view-page">
-        <div class="view-title">Contribute</div>
-        <div class="view-sub">Share your voice</div>
-        <div style="text-align:center;padding:60px 20px;color:var(--muted)">
-          <i class="ti ti-microphone" style="font-size:48px;opacity:.2;display:block;margin-bottom:16px"></i>
-          <p style="font-family:var(--serif);font-size:18px;font-style:italic;margin-bottom:8px">Record a clip</p>
-          <p style="font-size:13px;color:var(--muted2);margin-bottom:4px">Keep it under 2 minutes.</p>
-          <p style="font-family:var(--mono);font-size:10px;color:var(--muted2)">60–90 seconds is the sweet spot.</p>
+      <div class="view-inner">
+        <h1 class="view-title">Contribute</h1>
+        <p class="view-sub">Share your voice with The Nile</p>
+        <div class="empty-state">
+          <i class="ti ti-microphone"></i>
+          <p>Record a clip</p>
+          <span>60–90 seconds is the sweet spot. Max 2 minutes.</span>
         </div>
       </div>
     </div>
 
-    <!-- LIVE -->
+    <!-- ── LIVE ── -->
     <div class="view" id="view-live">
-      <div class="view-page">
-        <div class="view-title">Live</div>
-        <div class="view-sub">On air now</div>
-        <div style="text-align:center;padding:60px 20px;color:var(--muted)">
-          <i class="ti ti-broadcast" style="font-size:48px;opacity:.2;display:block;margin-bottom:16px"></i>
-          <p style="font-family:var(--serif);font-size:18px;font-style:italic">No live sessions right now</p>
+      <div class="view-inner">
+        <h1 class="view-title">Live</h1>
+        <p class="view-sub">On air now</p>
+        <div class="empty-state">
+          <i class="ti ti-broadcast"></i>
+          <p>No live sessions right now</p>
         </div>
       </div>
     </div>
 
-    <!-- ACTIVITY -->
+    <!-- ── ACTIVITY ── -->
     <div class="view" id="view-activity">
-      <div class="view-page">
-        <div class="view-title">Activity</div>
-        <div class="view-sub">What's new</div>
+      <div class="view-inner">
+        <h1 class="view-title">Activity</h1>
+        <p class="view-sub">What's new</p>
         <div id="activity-list"></div>
       </div>
     </div>
 
-    <!-- PROFILE -->
+    <!-- ── PROFILE ── -->
     <div class="view" id="view-profile">
-      <div class="view-page" style="padding:0">
-        <div class="profile-cover"><div class="profile-cover-text" id="profile-cover-text"></div></div>
+      <div class="profile-cover">
+        <div class="profile-cover-n" id="profile-cover-n">N</div>
+      </div>
+      <div class="profile-body">
         <div class="profile-top">
-          <div class="profile-avatar" id="profile-avatar">?</div>
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <button class="cr-follow" style="padding:8px 18px" id="btn-edit-profile">Edit Profile</button>
-            <button class="btn-signout" id="btn-signout"><i class="ti ti-logout"></i></button>
+          <div class="profile-av" id="profile-av">?</div>
+          <div class="profile-top-actions">
+            <button class="btn-outline" id="btn-edit">Edit Profile</button>
           </div>
         </div>
         <div class="profile-name" id="profile-name">Loading...</div>
         <div class="profile-handle" id="profile-handle">@user</div>
-        <div class="profile-bio" id="profile-bio">Creator on The Nile · N.I.L.E.</div>
+        <div class="profile-bio" id="profile-bio">Creator on The Nile</div>
         <div class="profile-stats">
-          <div class="stat"><div class="stat-n" id="stat-clips">0</div><div class="stat-l">Clips</div></div>
-          <div class="stat"><div class="stat-n" id="stat-followers">0</div><div class="stat-l">Followers</div></div>
-          <div class="stat"><div class="stat-n" id="stat-following">0</div><div class="stat-l">Following</div></div>
-          <div class="stat"><div class="stat-n" id="stat-plays">0</div><div class="stat-l">Plays</div></div>
+          <div class="pstat"><span id="stat-clips">0</span><label>Clips</label></div>
+          <div class="pstat"><span id="stat-followers">0</span><label>Followers</label></div>
+          <div class="pstat"><span id="stat-following">0</span><label>Following</label></div>
+          <div class="pstat"><span id="stat-plays">0</span><label>Plays</label></div>
         </div>
-        <div class="ptabs">
+        <div class="profile-tabs">
           <button class="ptab active" data-ptab="clips">Clips</button>
           <button class="ptab" data-ptab="liked">Liked</button>
           <button class="ptab" data-ptab="saved">Saved</button>
           <button class="ptab" data-ptab="about">About</button>
         </div>
-        <div id="ptab-clips" class="ptab-content active">
-          <div class="profile-empty"><i class="ti ti-microphone"></i><p>No clips yet</p><button class="cr-follow" onclick="switchView('create')">Contribute a Clip</button></div>
+        <div id="ptab-clips" class="ptab-pane active">
+          <div class="empty-state"><i class="ti ti-microphone"></i><p>No clips yet</p><button class="btn-primary" onclick="switchView('create')">Record a clip</button></div>
         </div>
-        <div id="ptab-liked" class="ptab-content"><div class="profile-empty"><i class="ti ti-heart"></i><p>No liked clips yet</p></div></div>
-        <div id="ptab-saved" class="ptab-content"><div class="profile-empty"><i class="ti ti-bookmark"></i><p>No saved clips yet</p></div></div>
-        <div id="ptab-about" class="ptab-content"><div id="about-section"></div></div>
+        <div id="ptab-liked" class="ptab-pane"><div class="empty-state"><i class="ti ti-heart"></i><p>No liked clips</p></div></div>
+        <div id="ptab-saved" class="ptab-pane"><div class="empty-state"><i class="ti ti-bookmark"></i><p>No saved clips</p></div></div>
+        <div id="ptab-about" class="ptab-pane"><div id="about-content"></div></div>
       </div>
     </div>
 
     <!-- PLAYER BAR -->
-    <div class="player-bar" id="player-bar" style="display:none">
-      <div class="pb-edition">Playing</div>
-      <div class="pb-info">
-        <div class="pb-title" id="pb-title">—</div>
-        <div class="pb-source" id="pb-source"></div>
+    <div id="player-bar" style="display:none">
+      <div class="pb-left">
+        <div class="pb-av" id="pb-av"></div>
+        <div class="pb-info">
+          <div class="pb-title" id="pb-title">—</div>
+          <div class="pb-source" id="pb-source"></div>
+        </div>
       </div>
-      <div class="pb-prog" id="pb-prog"><div class="pb-fill" id="pb-fill" style="width:0%"></div></div>
-      <div class="pb-controls">
+      <div class="pb-center">
+        <div class="pb-progress" id="pb-progress">
+          <div class="pb-fill" id="pb-fill"></div>
+        </div>
+      </div>
+      <div class="pb-right">
         <button class="pb-btn" id="pb-rew"><i class="ti ti-rewind-10"></i></button>
         <button class="pb-btn pb-play" id="pb-play"><i class="ti ti-player-play" id="pb-icon"></i></button>
-        <button class="pb-btn" id="pb-next-btn"><i class="ti ti-skip-forward"></i></button>
+        <button class="pb-btn" id="pb-skip"><i class="ti ti-skip-forward"></i></button>
       </div>
     </div>
-  </div>
 
-  <!-- MOBILE NAV — fixed bottom -->
-  <nav class="mobile-nav" id="mobile-nav">
-    <div class="mob-items">
-      <div class="mob-item active" data-view="feed"><i class="ti ti-home"></i></div>
-      <div class="mob-item" data-view="discover"><i class="ti ti-compass"></i></div>
-      <div class="mob-item" data-view="create"><div class="mob-plus"><i class="ti ti-plus"></i></div></div>
-      <div class="mob-item" data-view="activity"><i class="ti ti-bell"></i></div>
-      <div class="mob-item" data-view="profile"><i class="ti ti-user"></i></div>
-    </div>
-  </nav>
-</div>
+  </div><!-- /main -->
 
-<!-- AUTH -->
-<div class="auth-screen" id="auth-screen">
-  <div class="auth-card">
+</div><!-- /app -->
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mob-btn active" data-view="feed"><i class="ti ti-home"></i></button>
+  <button class="mob-btn" data-view="discover"><i class="ti ti-compass"></i></button>
+  <button class="mob-btn mob-create" data-view="create"><i class="ti ti-plus"></i></button>
+  <button class="mob-btn" data-view="activity"><i class="ti ti-bell"></i></button>
+  <button class="mob-btn" data-view="profile"><i class="ti ti-user"></i></button>
+</nav>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div id="auth-card">
     <div class="auth-logo">The Nile</div>
-    <div class="auth-tagline">News · Issues · Lifestyle · Entertainment</div>
+    <div class="auth-sub">News · Issues · Lifestyle · Entertainment</div>
     <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login">Sign In</button>
-      <button class="auth-tab" id="tab-signup">Subscribe Free</button>
+      <button class="auth-tab active" id="tab-in">Sign In</button>
+      <button class="auth-tab" id="tab-up">Subscribe Free</button>
     </div>
-    <div id="auth-err" style="display:none" class="auth-err"></div>
-    <div id="auth-ok" style="display:none" class="auth-ok"></div>
-    <form id="form-login">
-      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com" required></div>
-      <div class="field"><label>Password</label><input type="password" id="login-pw" placeholder="Password" required></div>
-      <button type="submit" class="auth-submit">Sign In →</button>
-      <div class="auth-switch">No account? <a id="to-signup">Subscribe free</a></div>
+    <div id="auth-msg"></div>
+    <form id="form-in">
+      <div class="auth-field"><label>Email</label><input type="email" id="in-email" placeholder="you@example.com" required></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="in-pw" placeholder="Password" required></div>
+      <button type="submit" class="btn-primary full">Sign In</button>
+      <p class="auth-switch">No account? <a id="to-up">Subscribe free</a></p>
     </form>
-    <form id="form-signup" style="display:none">
-      <div class="field"><label>Name</label><input type="text" id="signup-name" placeholder="Your name" required></div>
-      <div class="field"><label>Username</label><input type="text" id="signup-user" placeholder="yourhandle" required></div>
-      <div class="field"><label>Email</label><input type="email" id="signup-email" placeholder="you@example.com" required></div>
-      <div class="field"><label>Password</label><input type="password" id="signup-pw" placeholder="6+ characters" required minlength="6"></div>
-      <button type="submit" class="auth-submit">Subscribe Free →</button>
-      <div class="auth-switch">Already subscribed? <a id="to-login">Sign in</a></div>
+    <form id="form-up" style="display:none">
+      <div class="auth-field"><label>Name</label><input type="text" id="up-name" placeholder="Your name" required></div>
+      <div class="auth-field"><label>Username</label><input type="text" id="up-user" placeholder="yourhandle" required></div>
+      <div class="auth-field"><label>Email</label><input type="email" id="up-email" placeholder="you@example.com" required></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="up-pw" placeholder="6+ characters" required minlength="6"></div>
+      <button type="submit" class="btn-primary full">Subscribe Free</button>
+      <p class="auth-switch">Already subscribed? <a id="to-in">Sign in</a></p>
     </form>
   </div>
 </div>
 
 <!-- COMMENTS -->
-<div class="comments-modal" id="comments-modal" style="display:none">
-  <div class="comments-sheet">
+<div id="comments-modal" style="display:none">
+  <div id="comments-sheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title">Comments</div>
+    <h3 class="sheet-title">Comments</h3>
     <div id="comments-list"></div>
-    <div class="comment-input-row">
+    <div class="comment-row">
       <input id="comment-input" placeholder="Add a comment...">
-      <button class="send-btn" id="send-comment"><i class="ti ti-send"></i></button>
+      <button id="btn-comment"><i class="ti ti-send"></i></button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div id="toast"></div>
+
 <script src="js/app.js"></script>
 </body>
 </html>
