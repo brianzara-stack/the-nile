@@ -121,7 +121,7 @@ function waveAnim(id, pct) {
   const bars = document.querySelectorAll(`#wv-${id} .wv-bar`);
   bars.forEach((b, i) => {
     const bp = (i / bars.length) * 100;
-    b.style.background = bp < pct ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.18)';
+    b.style.background = bp < pct ? 'rgba(10,10,10,0.85)' : 'rgba(10,10,10,0.12)';
     if (playing && bp >= pct && bp < pct + 7)
       b.style.height = (5 + Math.random() * 26) + 'px';
   });
@@ -134,7 +134,7 @@ function buildWave(id, pct = 0) {
   for (let i = 0; i < 44; i++) {
     const b = document.createElement('div');
     b.className = 'wv-bar';
-    b.style.cssText = `height:${5 + Math.random() * 24}px;background:${(i / 44 * 100) < pct ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.18)'}`;
+    b.style.cssText = `height:${5 + Math.random() * 24}px;background:${(i / 44 * 100) < pct ? 'rgba(10,10,10,0.85)' : 'rgba(10,10,10,0.12)'}`;
     el.appendChild(b);
   }
 }
@@ -275,17 +275,49 @@ function buildFeed() {
 
     card.innerHTML = `
       <div class="clip-inner">
-        <div class="clip-bg" style="${hasImg
-          ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center`
-          : `background:${bg}`
-        }"></div>
-        <div class="clip-overlay"></div>
 
-        <div class="clip-top">
-          <span class="clip-cat">${clip.cat}</span>
-          <span class="clip-counter">${String(i + 1).padStart(2, '0')} / ${String(clips.length).padStart(2, '0')}</span>
+        <!-- TOP HALF — image/gradient -->
+        <div class="clip-image-half">
+          <div class="clip-bg" style="${hasImg
+            ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center`
+            : `background:${bg}`
+          }"></div>
+          <div class="clip-overlay"></div>
+
+          <!-- Category + counter -->
+          <div class="clip-top">
+            <span class="clip-cat">${clip.cat}</span>
+            <span class="clip-counter">${String(i+1).padStart(2,'0')} / ${String(clips.length).padStart(2,'0')}</span>
+          </div>
+
+          <!-- Actions overlaid on image -->
+          <div class="clip-actions">
+            <div class="clip-act-av-wrap" onclick="openProfile('${clip.id}')">
+              <div class="clip-act-av" style="${hasImg
+                ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center`
+                : `background:${bg}`
+              }">${!hasImg ? initials(clip.creator) : ''}</div>
+              <div class="clip-act-plus">+</div>
+            </div>
+            <div class="act-btn ${liked[clip.id] ? 'liked' : ''}" onclick="toggleLike('${clip.id}',this)">
+              <div class="act-icon"><i class="ti ti-heart"></i></div>
+              <span class="act-count" id="lc-${clip.id}">${fmtCount(clip.likes)}</span>
+            </div>
+            <div class="act-btn" onclick="openComments('${clip.id}')">
+              <div class="act-icon"><i class="ti ti-message-circle-2"></i></div>
+              <span class="act-count">${(comments[clip.id]||[]).length||0}</span>
+            </div>
+            <div class="act-btn ${saved[clip.id] ? 'saved' : ''}" onclick="toggleSave('${clip.id}',this)">
+              <div class="act-icon"><i class="ti ti-bookmark"></i></div>
+            </div>
+            <div class="act-btn" onclick="shareClip('${clip.id}')">
+              <div class="act-icon"><i class="ti ti-share-2"></i></div>
+              <span class="act-count">${fmtCount(clip.plays)}</span>
+            </div>
+          </div>
         </div>
 
+        <!-- BOTTOM HALF — white card -->
         <div class="clip-bottom">
           <div class="clip-creator">
             <div class="clip-creator-av" style="${hasImg
@@ -293,15 +325,14 @@ function buildFeed() {
               : `background:${bg}`
             }" onclick="openProfile('${clip.id}')">${!hasImg ? initials(clip.creator) : ''}</div>
             <span class="clip-creator-name" onclick="openProfile('${clip.id}')">${clip.creator}</span>
-            <button class="clip-follow-btn ${following[clip.id] ? 'following' : ''}"
-              id="fb-${clip.id}"
-              onclick="toggleFollow('${clip.id}')">
-              ${following[clip.id] ? 'Following' : 'Follow'}
+            <button class="clip-follow-btn ${following[clip.id]?'following':''}"
+              id="fb-${clip.id}" onclick="toggleFollow('${clip.id}')">
+              ${following[clip.id]?'Following':'Follow'}
             </button>
           </div>
 
           <div class="clip-title">${clip.title}</div>
-          ${clip.desc ? `<div class="clip-desc">${clip.desc.slice(0, 110)}</div>` : ''}
+          ${clip.desc ? `<div class="clip-desc">${clip.desc.slice(0,120)}</div>` : ''}
           <div class="clip-tags">${clip.tags}</div>
 
           <div class="clip-player">
@@ -317,38 +348,14 @@ function buildFeed() {
               <button class="clip-ctrl" onclick="rewind('${clip.id}')"><i class="ti ti-rewind-10"></i></button>
               <button class="clip-ctrl" onclick="prevClip()"><i class="ti ti-skip-back"></i></button>
               <button class="clip-play" onclick="togglePlay('${clip.id}')">
-                <i class="ti ${i === idx && playing ? 'ti-player-pause' : 'ti-player-play'}" id="pi-${clip.id}"></i>
+                <i class="ti ${i===idx&&playing?'ti-player-pause':'ti-player-play'}" id="pi-${clip.id}"></i>
               </button>
               <button class="clip-ctrl" onclick="nextClip()"><i class="ti ti-skip-forward"></i></button>
               <button class="clip-speed" onclick="cycleSpeed()">${speed}x</button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="clip-actions">
-        <div class="clip-act-av-wrap" onclick="openProfile('${clip.id}')">
-          <div class="clip-act-av" style="${hasImg
-            ? `background-image:url(${clip.podcastImage});background-size:cover;background-position:center`
-            : `background:${bg}`
-          }">${!hasImg ? initials(clip.creator) : ''}</div>
-          <div class="clip-act-plus">+</div>
-        </div>
-        <div class="act-btn ${liked[clip.id] ? 'liked' : ''}" onclick="toggleLike('${clip.id}', this)">
-          <div class="act-icon"><i class="ti ti-heart"></i></div>
-          <span class="act-count" id="lc-${clip.id}">${fmtCount(clip.likes)}</span>
-        </div>
-        <div class="act-btn" onclick="openComments('${clip.id}')">
-          <div class="act-icon"><i class="ti ti-message-circle-2"></i></div>
-          <span class="act-count">${(comments[clip.id] || []).length || 0}</span>
-        </div>
-        <div class="act-btn ${saved[clip.id] ? 'saved' : ''}" onclick="toggleSave('${clip.id}', this)">
-          <div class="act-icon"><i class="ti ti-bookmark"></i></div>
-        </div>
-        <div class="act-btn" onclick="shareClip('${clip.id}')">
-          <div class="act-icon"><i class="ti ti-share-2"></i></div>
-          <span class="act-count">${fmtCount(clip.plays)}</span>
-        </div>
       </div>`;
 
     container.appendChild(card);
@@ -396,7 +403,9 @@ function updateBar() {
   const c = clips[idx];
   if (!c) return;
   const bar = document.getElementById('player-bar');
-  if (bar) bar.style.display = 'flex';
+  // Only show player bar when NOT on feed view
+  const onFeed = document.getElementById('view-feed')?.classList.contains('active');
+  if (bar) bar.style.display = onFeed ? 'none' : 'flex';
   const t  = document.getElementById('pb-title');
   const s  = document.getElementById('pb-source');
   const av = document.getElementById('pb-av');
@@ -676,6 +685,9 @@ function switchView(v) {
   document.querySelectorAll(`[data-view="${v}"]`).forEach(el => el.classList.add('active'));
   if (v === 'profile')  buildProfile();
   if (v === 'discover') buildDiscover();
+  // Show player bar on all views except feed
+  const bar = document.getElementById('player-bar');
+  if (bar && clips.length) bar.style.display = v === 'feed' ? 'none' : 'flex';
 }
 
 // ═══════════════════════════════════════════════
